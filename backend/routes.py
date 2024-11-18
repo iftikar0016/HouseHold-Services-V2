@@ -52,7 +52,7 @@ def register():
 
     try :
         user = datastore.create_user(email = email, password = hash_password(password), active = True)
-        datastore.add_role_to_user(user, role)  # Add role separately
+        datastore.add_role_to_user(user, role)  
         db.session.commit()
         if user.roles[0].name == 'professional':
             professional = Professional(user_id=user.id)
