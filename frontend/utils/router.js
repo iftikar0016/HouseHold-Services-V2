@@ -6,6 +6,7 @@ import RegisterPage from "../pages/RegisterPage.js";
 import AdminDashboardPage from "../pages/AdminDashboardPage.js"
 import CustomerDashboardPage from "../pages/CustomerDashboardPage.js";
 import ProfessionalDashboardPage from "../pages/ProfessionalDashboardPage.js";
+import ServiceProfessionals from "../pages/ServiceProfessionals.js";
 
 const routes = [
     {path : '/', component : Home},
@@ -14,6 +15,7 @@ const routes = [
     {path : '/admin', component : AdminDashboardPage},
     {path : '/customer', component : CustomerDashboardPage},
     {path : '/professional', component : ProfessionalDashboardPage},
+    {path : '/service/:service_id/:user_id', component : ServiceProfessionals, props : true},
 ]
 
 const router = new VueRouter({

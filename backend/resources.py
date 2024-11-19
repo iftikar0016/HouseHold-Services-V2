@@ -49,36 +49,11 @@ service_request_fields = {
 }
 
 
-# class BlogAPI(Resource):
-
-#     @marshal_with(blog_fields)
-#     @auth_required('token')
-#     def get(self, blog_id):
-#         blog = Blog.query.get(blog_id)
-
-#         if not blog:
-#             return {"message" : "not found"}, 404
-#         return blog
-    
-#     @auth_required('token')
-#     def delete(self, blog_id):
-
-#         blog = Blog.query.get(blog_id)
-
-#         if not blog:
-#             return {"message" : "not found"}, 404
-        
-#         if blog.user_id == current_user.id:
-
-#             db.session.delete(blog)
-#             db.session.commit()
-#         else:
-#             return {"message" : "not valid user"}, 403
         
 
 class ServiceListAPI(Resource):
     @marshal_with(service_fields)
-    @auth_required('token')
+    # @auth_required('token')
     def get(self):
         services = Service.query.all()
         return services
@@ -87,8 +62,8 @@ class ServiceListAPI(Resource):
     @auth_required('token')
     def post(self):
         data = request.get_json()
-        name = data.get('name')
-        price = data.get('price')
+        name = data.get('service_name')
+        price = data.get('base_price')
         description = data.get('description')
         new_service = Service(name=name, price=price, description=description)
         db.session.add(new_service)
@@ -104,6 +79,13 @@ class ProfessionalListAPI(Resource):
         professionals = Professional.query.all()
         return professionals
 
+# professionals for specific service
+class ServiceProfessionalsAPI(Resource):
+    @marshal_with(professional_fields)
+    @auth_required('token')
+    def get(self,service_id):
+        professionals = Professional.query.filter_by(service_id=service_id).all()
+        return professionals
 
 # CustomerListAPI
 class CustomerListAPI(Resource):
@@ -154,3 +136,13 @@ api.add_resource(ServiceRequestAPI, '/service_requests')
 api.add_resource(CustomerListAPI, '/customers')
 api.add_resource(ProfessionalListAPI, '/professionals')
 api.add_resource(ServiceListAPI, '/services')
+
+api.add_resource(ServiceProfessionalsAPI, '/service/<int:service_id>/professionals')
+
+class UserServiceRequestAPI(Resource):
+    @marshal_with(service_request_fields)
+    # @auth_required('token')
+    def get(self, user_id):
+        service_requests = ServiceRequest.query.filter_by(customer_id=user_id).all()
+        return service_requests
+api.add_resource(UserServiceRequestAPI, '/services_requests/<int:user_id>')

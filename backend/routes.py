@@ -1,6 +1,7 @@
+from datetime import datetime
 from flask import current_app as app, jsonify, render_template,  request
 from flask_security import auth_required, verify_password, hash_password
-from backend.models import Customer, Professional, db
+from backend.models import Customer, Professional, Service, ServiceRequest, db
 
 datastore = app.security.datastore
 
@@ -67,3 +68,28 @@ def register():
     except:
         db.session.rollback()
         return jsonify({"message" : "error creating user"}), 400
+    
+
+@app.route('/add_service', methods=['GET','POST'])
+def addService():
+    if request.method=="POST":
+        ServiceName= request.form.get('service_name')
+        BasePrice = request.form.get('base_price')
+        description = request.form.get('description')
+        new_service = Service( name= ServiceName , price= BasePrice, description=description )
+        db.session.add(new_service)
+        db.session.commit()
+        return jsonify({"message" : "service added"}), 200
+    
+@app.route('/service_request/<int:user_id>/<int:professional_id>', methods=['GET'])
+def service_request(user_id, professional_id):
+    # ServiceRequest=ServiceRequest.query.filter_by(id=id).first()
+    professional=Professional.query.filter_by(user_id=professional_id).first()
+    service=Service.query.get(professional.service_id)
+    user=Customer.query.filter_by(user_id=user_id).first()
+    new_service_request = ServiceRequest(service_name=service.name, customer_name=user.fullname, professional_name=professional.fullname ,service_id=professional.service_id, customer_id=user.user_id, professional_id=professional.user_id,date_of_request=datetime.now() )
+    db.session.add(new_service_request)
+    db.session.commit()
+    return jsonify({"message" : "New Service Request added"}), 200
+
+

@@ -1,13 +1,9 @@
 export default {
     template :`
     <div class="card">
-        <div class="card-header">
-        <h4>Professionals</h4>
-        </div>
-        <h3>Manage Professionals</h3>
-        <div class="tableMain">
-          <table class="table">
-            <thead>
+        <div class="container mt-5">
+          <table class="table table-hover table-bordered">
+            <thead class="table-light">
               <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>

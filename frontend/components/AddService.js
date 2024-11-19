@@ -10,7 +10,7 @@ const styles = `
   .form-container {
     width: 400px;
     padding: 20px;
-    margin: 50px auto;
+    margin: 10px auto;
     border: 2px solid #ccc;
     border-radius: 10px;
     text-align: center;
@@ -104,19 +104,31 @@ export default {
     };
   },
   methods: {
-    submitForm() {
+   async submitForm() {
       // Submit form logic or call an API endpoint here
-      console.log("Form Submitted", {
-        serviceName: this.serviceName,
-        description: this.description,
-        basePrice: this.basePrice
-      });
+      const res = await fetch(location.origin+'/api/services', 
+        {method : 'POST', 
+            headers: {'Content-Type' : 'application/json',
+                      'Authentication-Token' : this.$store.state.auth_token
+            }, 
+            body : JSON.stringify({'service_name': this.serviceName,'description': this.description, 'base_price' : this.basePrice})
+        })
+      if (res.ok){
+        console.log("Form Submitted", {
+          serviceName: this.serviceName,
+          description: this.description,
+          basePrice: this.basePrice
+        });
+      }
+      this.$emit('AddServiceAction')
+      
     },
     cancelForm() {
       // Clear form fields or navigate away
       this.serviceName = '';
       this.description = '';
       this.basePrice = '';
+      this.$emit('AddServiceAction');
     }
   }
 };
