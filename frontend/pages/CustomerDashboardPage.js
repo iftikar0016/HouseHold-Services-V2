@@ -35,7 +35,7 @@ export default {
                     </thead>
                     <tbody>
                         <tr 
-                            v-for="(service,index) in serviceHistory" 
+                            v-for="(service,index) in filteredServiceHistory" 
                             :key="service.id"
                         >
                         <th scope="row">{{ index + 1 }}</th>
@@ -110,6 +110,9 @@ export default {
         }
     },
     computed: {
+        filteredServiceHistory() { if (!this.requestQuery) return this.serviceHistory; 
+            const lowerQuery = this.requestQuery.toLowerCase();
+             return this.serviceHistory.filter(service => service.service_name.toLowerCase().includes(lowerQuery) || service.professional_name.toLowerCase().includes(lowerQuery) || service.id.toString().includes(lowerQuery) || service.service_id.toString().includes(lowerQuery) || service.date_of_request.toLowerCase().includes(lowerQuery) || service.status.toLowerCase().includes(lowerQuery) ); }
       },
 
     async mounted() {

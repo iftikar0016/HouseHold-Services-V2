@@ -46,14 +46,19 @@ export default {
                     <tbody>
                       <tr v-for="(service, index) in requestedServices" :key="service.id">
                         <th scope="row">{{ index + 1 }}</th>
-                        <td>{{ service.customer_id }}</td>
+                        <td>{{ service.customer_name }}</td>
                         <td>{{ service.date_of_request }}</td>
                         <td>
                           <template v-if="service.status === 'requested'">
                             <button 
                               class="btn btn-sm btn-success" 
                               @click="acceptService(service.id)">
-                              Accept it?
+                              Accept
+                            </button>
+                            <button 
+                              class="btn btn-sm btn-danger" 
+                              @click="rejectService(service.id)">
+                              Reject
                             </button>
                           </template>
                           <template v-else-if="service.status === 'closed'">Closed</template>
@@ -85,7 +90,7 @@ export default {
                     <tbody>
                       <tr v-for="(service, index) in closedServices" :key="service.id">
                         <th scope="row">{{ index + 1 }}</th>
-                        <td>{{ service.customer_id }}</td>
+                        <td>{{ service.customer_name }}</td>
                         <td>{{ service.date_of_request }}</td>
                         <td>
                           <button class="btn btn-sm btn-warning" @click="editService(service.id)">Edit</button>
@@ -109,7 +114,7 @@ data() {
   },
   computed: {
     requestedServices() {
-      return this.services.filter((service) => service.status === 'requested');
+      return this.services.filter((service) => service.status !== 'closed');
     },
     closedServices() {
       return this.services.filter((service) => service.status === 'closed');
@@ -118,7 +123,11 @@ data() {
   methods: {
     async fetchServices() {
       try {
-        const res = await fetch(`${location.origin}/api/services`);
+        const res = await fetch(location.origin + '/api/services_requests/' + `${this.$store.state.user_id}`, {
+          headers: {
+              'Authentication-Token': this.$store.state.auth_token
+          }
+      });
         if (res.ok) {
           this.services = await res.json();
         } else {
@@ -128,9 +137,22 @@ data() {
         console.error('Error fetching services:', error);
       }
     },
-    acceptService(serviceId) {
-      console.log(`Accepted service with ID: ${serviceId}`);
+    async acceptService(serviceId) {
+      const res = await fetch(`/accept_req/${serviceId}`, { method: 'GET' });
+      if (res.ok) {
+          console.log(`Accepted service with ID: ${serviceId}`);
+          this.fetchServices(); // Refresh service history
+      }
       // Call API to update service status
+    },
+    async rejectService(serviceId) {
+      
+      // Call API to update service status
+      const res = await fetch(`/reject_req/${serviceId}`, { method: 'GET' });
+      if (res.ok) {
+          console.log(`Accepted service with ID: ${serviceId}`);
+          this.fetchServices(); // Refresh service history
+      }
     },
     editService(serviceId) {
       console.log(`Editing service with ID: ${serviceId}`);

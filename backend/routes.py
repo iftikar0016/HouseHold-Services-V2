@@ -93,3 +93,31 @@ def service_request(user_id, professional_id):
     return jsonify({"message" : "New Service Request added"}), 200
 
 
+@app.route('/accept_req/<int:id>')
+def accept_req(id):
+    req= ServiceRequest.query.get(id)
+    req.status = "accepted"
+    db.session.commit()
+    return jsonify({"message" : "New Service Request Accepted"}), 200
+
+@app.route('/reject_req/<int:id>')
+def reject_req(id):
+    req= ServiceRequest.query.get(id)
+    req.status = "rejected"
+    db.session.commit()
+    return jsonify({"message" : "New Service Request Rejected"}), 200
+
+@app.route('/editservice/<int:id>', methods=['GET','POST'])
+def editService(id):
+    service=Service.query.filter_by(id=id).first()
+    if request.method=="POST":
+        ServiceName= request.form.get('service_name')
+        BasePrice = request.form.get('base_price')
+        description = request.form.get('description')
+        if description !='':
+            service.description= description
+        if ServiceName != '':
+            service.name = ServiceName
+        if BasePrice != '':
+            service.price= BasePrice
+        db.session.commit()

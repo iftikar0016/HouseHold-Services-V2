@@ -144,5 +144,6 @@ class UserServiceRequestAPI(Resource):
     # @auth_required('token')
     def get(self, user_id):
         service_requests = ServiceRequest.query.filter_by(customer_id=user_id).all()
-        return service_requests
+        prof_requests = ServiceRequest.query.filter_by(professional_id=user_id).all()
+        return service_requests + prof_requests
 api.add_resource(UserServiceRequestAPI, '/services_requests/<int:user_id>')
