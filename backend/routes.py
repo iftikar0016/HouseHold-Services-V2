@@ -4,6 +4,8 @@ from flask_security import auth_required, verify_password, hash_password
 from backend.models import Customer, Professional, Service, ServiceRequest, db
 
 datastore = app.security.datastore
+cache = app.cache
+
 
 @app.route('/')
 def home():
@@ -107,17 +109,19 @@ def reject_req(id):
     db.session.commit()
     return jsonify({"message" : "New Service Request Rejected"}), 200
 
-@app.route('/editservice/<int:id>', methods=['GET','POST'])
+@app.route('/editservice/<int:id>', methods=['POST'])
 def editService(id):
+    data = request.get_json()
     service=Service.query.filter_by(id=id).first()
-    if request.method=="POST":
-        ServiceName= request.form.get('service_name')
-        BasePrice = request.form.get('base_price')
-        description = request.form.get('description')
-        if description !='':
-            service.description= description
-        if ServiceName != '':
-            service.name = ServiceName
-        if BasePrice != '':
-            service.price= BasePrice
-        db.session.commit()
+    
+    ServiceName= data.get('service_name')
+    BasePrice = data.get('base_price')
+    description = data.get('description')
+    if description !='':
+        service.description= description
+    if ServiceName != '':
+        service.name = ServiceName
+    if BasePrice != '':
+        service.price= BasePrice
+    db.session.commit()
+    return jsonify({"message" : "Service Edited"}), 200

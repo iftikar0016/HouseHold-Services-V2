@@ -61,7 +61,7 @@ export default {
 
         async updateService(updatedService) {
             // Handle service update logic here
-            const res = await fetch(location.origin+'/register', 
+            const res = await fetch(location.origin+'/editservice/' + this.selectedService.id, 
               {method : 'POST', 
                   headers: {'Content-Type' : 'application/json',
                             'Authentication-Token': this.$store.state.auth_token
@@ -70,6 +70,7 @@ export default {
               })
           if (res.ok){
             console.log('Service updated:', updatedService);
+            await this.fetchServices();
           }
           
         }

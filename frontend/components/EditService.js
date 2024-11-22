@@ -54,20 +54,7 @@ export default {
         }
     },
     methods: {
-        async updateService(updatedService) {
-            // Handle service update logic here
-            const res = await fetch(location.origin+'/register', 
-              {method : 'POST', 
-                  headers: {'Content-Type' : 'application/json',
-                            'Authentication-Token': this.$store.state.auth_token
-                  }, 
-                  body : JSON.stringify(updatedService)
-              })
-          if (res.ok){
-            console.log('Service updated:', updatedService);
-          }
-          
-        },
+        
         saveChanges() {
             this.$emit('save', this.formData);
             const modalElement = document.getElementById('editServiceModal');

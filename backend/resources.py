@@ -1,8 +1,9 @@
-from flask import jsonify, request
+from flask import jsonify, request, current_app as app
 from flask_restful import Api, Resource, fields, marshal_with
 from flask_security import auth_required, current_user, roles_required
 from backend.models import Customer, Professional, Service, ServiceRequest, db
 
+cache = app.cache
 
 api = Api(prefix='/api')
 
@@ -52,6 +53,7 @@ service_request_fields = {
         
 
 class ServiceListAPI(Resource):
+    @cache.cached(timeout = 5, key_prefix = "service_list")
     @marshal_with(service_fields)
     # @auth_required('token')
     def get(self):
@@ -140,8 +142,9 @@ api.add_resource(ServiceListAPI, '/services')
 api.add_resource(ServiceProfessionalsAPI, '/service/<int:service_id>/professionals')
 
 class UserServiceRequestAPI(Resource):
-    @marshal_with(service_request_fields)
     # @auth_required('token')
+    @cache.memoize(timeout = 5)
+    @marshal_with(service_request_fields)
     def get(self, user_id):
         service_requests = ServiceRequest.query.filter_by(customer_id=user_id).all()
         prof_requests = ServiceRequest.query.filter_by(professional_id=user_id).all()
