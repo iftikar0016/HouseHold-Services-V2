@@ -143,7 +143,7 @@ api.add_resource(ServiceProfessionalsAPI, '/service/<int:service_id>/professiona
 
 class UserServiceRequestAPI(Resource):
     # @auth_required('token')
-    @cache.memoize(timeout = 5)
+    # @cache.memoize(timeout = 5)
     @marshal_with(service_request_fields)
     def get(self, user_id):
         service_requests = ServiceRequest.query.filter_by(customer_id=user_id).all()
