@@ -7,11 +7,15 @@ import AdminDashboardPage from "../pages/AdminDashboardPage.js"
 import CustomerDashboardPage from "../pages/CustomerDashboardPage.js";
 import ProfessionalDashboardPage from "../pages/ProfessionalDashboardPage.js";
 import ServiceProfessionals from "../pages/ServiceProfessionals.js";
+import CustomerRegister from "../pages/CustomerRegisterPage.js";
+import ProfessionalRegister from "../pages/ProfessionalRegisterPage.js";
 
 const routes = [
     {path : '/', component : Home},
     {path : '/login', component : LoginPage},
     {path : '/register', component : RegisterPage},
+    {path : '/customer_register', component : CustomerRegister},
+    {path : '/professional_register', component : ProfessionalRegister},
     {path : '/admin', component : AdminDashboardPage},
     {path : '/customer', component : CustomerDashboardPage},
     {path : '/professional', component : ProfessionalDashboardPage},

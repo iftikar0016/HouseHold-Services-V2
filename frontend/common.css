@@ -324,3 +324,163 @@ label.star:before {
 }
 
 }
+
+.customer_register_page{
+
+
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+
+#main {
+    background-color: white;
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#formhead h1 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px 14px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #555;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus {
+    border-color: #0066cc;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #005bb5;
+}
+
+button:focus {
+    outline: none;
+}
+
+#form-body {
+    margin-top: 10px;
+}
+
+}
+
+.professional_register_page{
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f4f8;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: auto;
+
+  #main {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 90%;
+    max-width: 500px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-style: double;
+  }
+
+  h1 {
+      text-align: center;
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 20px;
+  }
+
+  label {
+      font-weight: bold;
+      color: #333;
+      display: block;
+      margin-bottom: 5px;
+  }
+
+  input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
+  }
+
+  input[type="file"] {
+      padding: 3px;
+  }
+
+  button {
+      width: 100%;
+      padding: 12px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+      background-color: #218838;
+  }
+
+  #form-body {
+      padding: 0;
+  }
+
+  /* Adjustments for smaller screens */
+  @media (max-width: 600px) {
+      #main {
+          padding: 15px;
+      }
+
+      h1 {
+          font-size: 22px;
+      }
+  }
+}

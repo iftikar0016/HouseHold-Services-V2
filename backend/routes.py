@@ -44,6 +44,9 @@ def register():
     email = data.get('email')
     password = data.get('password')
     role = data.get('role')
+    fullname = data.get('fullname') 
+    address = data.get('address') 
+    pincode = data.get('pincode')
 
     if not email or not password or role not in ['customer', 'professional']:
         return jsonify({"message" : "invalid inputs"}), 404
@@ -58,12 +61,14 @@ def register():
         datastore.add_role_to_user(user, role)  
         db.session.commit()
         if user.roles[0].name == 'professional':
-            professional = Professional(user_id=user.id)
+            service=data.get('service')
+            phone_no=data.get('phone')
+            professional = Professional(user_id=user.id,  address=address, pincode=pincode, fullname= fullname, service_id=service, phone_no=phone_no)
             db.session.add(professional)
             db.session.commit()
             return jsonify({"message" : "prof created"}), 200
         
-        customer = Customer(user_id=user.id)
+        customer = Customer(user_id=user.id,  address=address, pincode=pincode, fullname= fullname)
         db.session.add(customer)
         db.session.commit()
         return jsonify({"message" : "customer created"}), 200

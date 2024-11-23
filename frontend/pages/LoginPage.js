@@ -15,9 +15,11 @@ export default {
                 <button type="submit" class="btn">Login</button>
             </form>
             <div class="footer">
-                <span>Don't have an account?<a style="padding-left: 12px;" href="/register">Sign Up</a></span>
+                <span>Don't have an account?
+                    <router-link to='/customer_register' style="padding-left: 12px;">Sign Up</router-link>
+                </span>
                 <span>Or</span>
-                <router-link to='/'>Register As Professional</router-link>
+                <router-link to='/professional_register'>Register As Professional</router-link>
             </div>
         </div>    
     </div>
