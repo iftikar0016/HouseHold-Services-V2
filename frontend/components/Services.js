@@ -16,7 +16,7 @@ export default {
                         <button class="btn btn-outline-secondary" type="submit">Search</button>
                     </div>
                 </form>
-                <h2 style="padding-bottom: 5px;">Looking For?</h2>
+                <h2 style="padding-bottom: 5px; display: flex; justify-content: center;">All Available Services</h2>
                 <div class="row g-3">
                     <div 
                         v-for="service in filteredServices" 
