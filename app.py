@@ -38,6 +38,8 @@ import backend.initial_data
 
 import backend.routes
 
+import backend.celery.celery_schedule
+
 excel.init_excel(app)
         
 if (__name__ == '__main__'):
