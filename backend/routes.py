@@ -147,3 +147,10 @@ def editService(id):
         service.price= BasePrice
     db.session.commit()
     return jsonify({"message" : "Service Edited"}), 200
+
+@app.route('/delete_service/<int:id>')
+def delete_service(id):
+    service=Service.query.filter_by(id=id).first()
+    db.session.delete(service)
+    db.session.commit()
+    return jsonify({"message" : "Service Deleted"}), 200

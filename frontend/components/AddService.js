@@ -121,6 +121,7 @@ export default {
         });
       }
       this.$emit('AddServiceAction')
+      this.$emit('updated')
       
     },
     cancelForm() {

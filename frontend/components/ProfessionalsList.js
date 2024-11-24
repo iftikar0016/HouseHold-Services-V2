@@ -1,5 +1,19 @@
 export default {
     template :`
+     <div>     <!-- search box -->
+          <form @submit.prevent="searchRequests" style="padding: 30px 200px 0 300px;">
+          <div class="input-group mb-3">
+              <input 
+                  v-model="requestQuery" 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="Search Requests"
+                  aria-label="Search Requests"
+              />
+              <button class="btn btn-outline-secondary" type="submit">Search</button>
+          </div>
+      </form>
+
     <div class="card">
         <div class="container mt-5">
           <table class="table table-hover table-bordered">
@@ -13,7 +27,7 @@ export default {
             
             </thead>
             <tbody class="table-group-divider">
-              <tr v-for="(prof, index) in professionals" :key="prof.id">
+              <tr v-for="(prof, index) in filteredProfessionals" :key="prof.id">
                 <th scope="row">{{ index + 1 }}</th>
                 <td>{{ prof.fullname }}</td>
                 <td>{{ prof.service_id }}</td>
@@ -27,7 +41,8 @@ export default {
     `,
     data(){
         return {
-            professionals: []
+            professionals: [],
+            requestQuery: ''
         }
     },
     methods : {
@@ -49,7 +64,11 @@ export default {
 
         this.professionals = await res.json()
     },
-    components : {
-    }
+    computed: {
+      filteredProfessionals() { if (!this.requestQuery) return this.professionals; 
+          const lowerQuery = this.requestQuery.toLowerCase();
+           return this.professionals.filter(prof => prof.fullname.toLowerCase().includes(lowerQuery) || prof.user_id.toString().includes(lowerQuery) || prof.service_id.toString().includes(lowerQuery) || prof.pincode.toString().includes(lowerQuery)); }
+    },
+
 
 }

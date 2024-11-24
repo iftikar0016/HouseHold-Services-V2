@@ -30,10 +30,11 @@ export default {
                 <button class="button-50" role="button" @click="AddServiceAction" >Add Service</button>
                 <AddService v-if="showAddService"
                     @AddServiceAction="AddServiceAction"
+                    @updated="updateService"
                 ></AddService>
 
             <!-- all the services are here -->
-            <ServiceList></ServiceList>
+            <ServiceList ref="servicetable"></ServiceList>
                 
         </div>
 
@@ -41,13 +42,7 @@ export default {
         <!-- Professionals Tab -->
         <div class="tab-pane fade" id="professionals" role="tabpanel" aria-labelledby="professionals-tab">
             <h3>Manage Professionals</h3>
-            <!-- search box -->
-              <form action="/search_professional">
-                <div class="input-group mb-3" style="padding-left: 300px; padding-right: 200px; padding-top: 30px;">
-                    <input name="result" type="text" class="form-control" placeholder="Search Professional" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
-                </div>
-              </form>
+
 
             <!-- Add table or functionality to manage professionals here -->
             <ProfessionalsList></ProfessionalsList>
@@ -58,6 +53,19 @@ export default {
         <!-- Service Requests Tab -->
         <div class="tab-pane fade" id="service-requests" role="tabpanel" aria-labelledby="service-requests-tab">
             <h3>Manage Service Requests</h3>
+                        <!-- Search Box for Requests -->
+                        <form @submit.prevent="searchRequests" style="padding: 30px 200px 0 300px;">
+                        <div class="input-group mb-3">
+                            <input 
+                                v-model="requestQuery" 
+                                type="text" 
+                                class="form-control" 
+                                placeholder="Search Requests"
+                                aria-label="Search Requests"
+                            />
+                            <button class="btn btn-outline-secondary" type="submit">Search</button>
+                        </div>
+                    </form>
             <!-- Service Req Table -->
             <section class="container mt-5">
                 <h3>Service History</h3>
@@ -109,6 +117,11 @@ export default {
         AddServiceAction(){
             this.showAddService=!this.showAddService
         },
+
+        updateService(){
+            this.$refs.servicetable.fetchServices();
+      },
+
         // All Service Requests History of User
         async fetchServicesRequests() {
             const res = await fetch(location.origin + '/api/service_requests', {
@@ -145,8 +158,10 @@ export default {
     computed: {
         filteredServiceHistory() { if (!this.requestQuery) return this.serviceHistory; 
             const lowerQuery = this.requestQuery.toLowerCase();
-             return this.serviceHistory.filter(service => service.service_name.toLowerCase().includes(lowerQuery) || service.professional_name.toLowerCase().includes(lowerQuery) || service.id.toString().includes(lowerQuery) || service.service_id.toString().includes(lowerQuery) || service.date_of_request.toLowerCase().includes(lowerQuery) || service.status.toLowerCase().includes(lowerQuery) ); }
+             return this.serviceHistory.filter(service => service.service_name.toLowerCase().includes(lowerQuery) || service.professional_name.toLowerCase().includes(lowerQuery) || service.id.toString().includes(lowerQuery) || service.service_id.toString().includes(lowerQuery) || service.date_of_request.toLowerCase().includes(lowerQuery) || service.status.toLowerCase().includes(lowerQuery) || service.status.toLowerCase().includes(lowerQuery) ); }
       },
+
+
       async mounted() {
         // Fetch initial data for services and service history
         await this.fetchServicesRequests()

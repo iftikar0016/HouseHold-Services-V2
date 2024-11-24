@@ -10,8 +10,8 @@ export default {
                          
                                 <th scope="col">ID</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">Service Name</th>
-                                <th scope="col">Date of Request</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Base Price</th>
                                 <th scope="col">Action</th>
                         
                         </thead>
@@ -19,10 +19,11 @@ export default {
                             <tr v-for="(service, index) in services" :key="service.id">
                                 <th scope="row">{{ index + 1 }}</th>
                                 <td>{{ service.name }}</td>
-                                <td>{{ service.professional_name }}</td>
-                                <td>{{ service.date_of_request }}</td>
+                                <td>{{ service.description }}</td>
+                                <td>{{ service.price }}</td>
                                 <td>
                                     <button class="button-30" @click="showModal(service)">Edit Service</button>
+                                    <button class="button-30" @click="deleteService(service.id)">Delete</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -43,6 +44,17 @@ export default {
     },
 
     methods: {
+        async deleteService(id){
+            const res = await fetch(location.origin + '/delete_service/' + id, {
+                headers: {
+                    'Authentication-Token': this.$store.state.auth_token
+                }
+            });
+            if (res.ok){
+                this.fetchServices()
+            }
+        }
+        ,
         async fetchServices() {
             const res = await fetch(location.origin + '/api/services', {
                 headers: {
