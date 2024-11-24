@@ -105,34 +105,6 @@ class ServiceRequestAPI(Resource):
         service_requests = ServiceRequest.query.all()
         return service_requests
 
-    @auth_required('token')
-    def post(self):
-        data = request.get_json()
-        customer_name = data.get('customer_name')
-        professional_name = data.get('professional_name')
-        service_name = data.get('service_name')
-        service_id = data.get('service_id')
-        customer_id = data.get('customer_id')
-        professional_id = data.get('professional_id')
-        date_of_request = data.get('date_of_request')
-        date_of_completion = data.get('date_of_completion')
-        status = data.get('status', 'requested')
-        remarks = data.get('remarks')
-        new_service_request = ServiceRequest(
-            customer_name=customer_name,
-            professional_name=professional_name,
-            service_name=service_name,
-            service_id=service_id,
-            customer_id=customer_id,
-            professional_id=professional_id,
-            date_of_request=date_of_request,
-            date_of_completion=date_of_completion,
-            status=status,
-            remarks=remarks
-        )
-        db.session.add(new_service_request)
-        db.session.commit()
-        return jsonify({'message': 'New service request added'})
 
 api.add_resource(ServiceRequestAPI, '/service_requests')
 api.add_resource(CustomerListAPI, '/customers')

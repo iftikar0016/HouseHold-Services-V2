@@ -24,14 +24,14 @@ export default {
                 <h3>Service History</h3>
                 <table class="table table-hover table-bordered">
                     <thead class="table-light">
-                        <tr>
+                        
                             <th>ID</th>
                             <th>Service ID</th>
                             <th>Service Name</th>
                             <th>Professional Name</th>
                             <th>Date of Request</th>
                             <th>Status</th>
-                        </tr>
+                        
                     </thead>
                     <tbody>
                         <tr 

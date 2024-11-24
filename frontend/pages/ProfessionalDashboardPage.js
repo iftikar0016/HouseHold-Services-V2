@@ -36,12 +36,12 @@ export default {
                 <div class="container mt-5">
                   <table class="table table-hover table-bordered">
                     <thead class="table-light">
-                      <tr>
+                     
                         <th scope="col">ID</th>
                         <th scope="col">Customer Name</th>
                         <th scope="col">Date of Request</th>
                         <th scope="col">Action</th>
-                      </tr>
+                      
                     </thead>
                     <tbody>
                       <tr v-for="(service, index) in requestedServices" :key="service.id">

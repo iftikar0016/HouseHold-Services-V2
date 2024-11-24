@@ -4,19 +4,19 @@ export default {
         <div class="container mt-5">
           <table class="table table-hover table-bordered">
             <thead class="table-light">
-              <tr>
+          
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Service Name</th>
                 <th scope="col">Pin Code</th>
                 <th scope="col">Action</th>
-              </tr>
+            
             </thead>
             <tbody class="table-group-divider">
               <tr v-for="(prof, index) in professionals" :key="prof.id">
                 <th scope="row">{{ index + 1 }}</th>
                 <td>{{ prof.fullname }}</td>
-                <td>{{ professionals }}</td>
+                <td>{{ prof.service_id }}</td>
                 <td>{{ prof.pincode }}</td>
               </tr>
             </tbody>

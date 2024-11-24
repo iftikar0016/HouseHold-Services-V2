@@ -58,7 +58,41 @@ export default {
         <!-- Service Requests Tab -->
         <div class="tab-pane fade" id="service-requests" role="tabpanel" aria-labelledby="service-requests-tab">
             <h3>Manage Service Requests</h3>
-            <!-- Add table or functionality to manage service requests here -->
+            <!-- Service Req Table -->
+            <section class="container mt-5">
+                <h3>Service History</h3>
+                <table class="table table-hover table-bordered">
+                    <thead class="table-light">
+                        
+                            <th>ID</th>
+                            <th>Service Name</th>
+                            <th>Customer Name</th>
+                            <th>Professional Name</th>
+                            <th>Date of Request</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        
+                    </thead>
+                    <tbody>
+                        <tr 
+                            v-for="(service,index) in filteredServiceHistory" 
+                            :key="service.id"
+                        >
+                        <th scope="row">{{ index + 1 }}</th>
+                            <td>{{ service.service_name }}</td> 
+                            <td>{{ service.customer_name }}</td>
+                            <td>{{ service.professional_name }}</td>
+                            <td>{{ service.date_of_request }}</td>
+                            <td>
+                                {{service.status}}
+                            </td>
+                            <td>
+                                <button class="btn" @click="create_csv(service.id)">Download</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
 
         </div>
     </div>
@@ -67,17 +101,55 @@ export default {
     data(){
         return{
             showAddService: false,
+            requestQuery: '',
+            serviceHistory: [] 
         }
     },
     methods: {
         AddServiceAction(){
             this.showAddService=!this.showAddService
-        }
+        },
+        // All Service Requests History of User
+        async fetchServicesRequests() {
+            const res = await fetch(location.origin + '/api/service_requests', {
+                headers: {
+                    'Authentication-Token': this.$store.state.auth_token
+                }
+            });
+            if (res.ok){
+                this.serviceHistory = await res.json();
+            }
+            
+        },
+        async create_csv(id){
+            const res = await fetch(location.origin + '/create-csv/' + id)
+            const task_id = (await res.json()).task_id
+
+            const interval = setInterval(async() => {
+                const res = await fetch(`${location.origin}/get-csv/${task_id}`)
+                if (res.ok){
+                    console.log('data is ready')
+                    window.open(`${location.origin}/get-csv/${task_id}`)
+                    clearInterval(interval)
+                }
+
+            }, 100)
+            
+        },
     },
     components : {
         ProfessionalsList,
         ServiceList,
         AddService,
+    },
+    computed: {
+        filteredServiceHistory() { if (!this.requestQuery) return this.serviceHistory; 
+            const lowerQuery = this.requestQuery.toLowerCase();
+             return this.serviceHistory.filter(service => service.service_name.toLowerCase().includes(lowerQuery) || service.professional_name.toLowerCase().includes(lowerQuery) || service.id.toString().includes(lowerQuery) || service.service_id.toString().includes(lowerQuery) || service.date_of_request.toLowerCase().includes(lowerQuery) || service.status.toLowerCase().includes(lowerQuery) ); }
+      },
+      async mounted() {
+        // Fetch initial data for services and service history
+        await this.fetchServicesRequests()
     },
 
 }

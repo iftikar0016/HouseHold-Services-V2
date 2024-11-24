@@ -7,13 +7,13 @@ export default {
                 <div class="container mt-5">
                     <table class="table table-hover table-bordered">
                         <thead class="table-light">
-                            <tr>
+                         
                                 <th scope="col">ID</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Service Name</th>
                                 <th scope="col">Date of Request</th>
                                 <th scope="col">Action</th>
-                            </tr>
+                        
                         </thead>
                         <tbody class="table-group-divider">
                             <tr v-for="(service, index) in services" :key="service.id">
@@ -22,7 +22,7 @@ export default {
                                 <td>{{ service.professional_name }}</td>
                                 <td>{{ service.date_of_request }}</td>
                                 <td>
-                                    <button class="btn btn-primary" @click="showModal(service)">Edit Service</button>
+                                    <button class="button-30" @click="showModal(service)">Edit Service</button>
                                 </td>
                             </tr>
                         </tbody>
