@@ -27,7 +27,7 @@ export default {
             <h3 style="display: flex; justify-content: center; padding-bottom: 5px;">Manage Services</h3>
             <!-- Add table or functionality to manage services here -->
             
-                <button class="button-50" role="button" @click="AddServiceAction" >Add Service</button>
+                <button class="button-29" role="button" style="padding: 20px; font-size: 28px;" @click="AddServiceAction" ><span style="padding-right: 10px;">Add Service</span> <i class="fa-solid fa-plus" style="font-size: 30px;"></i></button>
                 <AddService v-if="showAddService"
                     @AddServiceAction="AddServiceAction"
                     @updated="updateService"

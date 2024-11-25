@@ -32,6 +32,11 @@ export default {
                 <td>{{ prof.fullname }}</td>
                 <td>{{ prof.service_id }}</td>
                 <td>{{ prof.pincode }}</td>
+                <td>
+                  <button v-if="prof.active==false" @click='approve(prof.user_id)'>Approve</button>
+                  <button v-else-if="prof.is_blocked==false" @click='block(prof.user_id)'>Block</button>
+                  <button v-else="prof.is_blocked==false" @click='unblock(prof.user_id)'>UnBlock</button>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -46,23 +51,65 @@ export default {
         }
     },
     methods : {
-        approveProfessional(id) {
-            alert(`Approving professional with ID ${id}`)
-            // Add logic to approve professional
-          },
-          blockProfessional(id) {
-            alert(`Blocking professional with ID ${id}`)
+      async fetchProfessioinals(){
+        const res = await fetch(location.origin + '/api/professionals', {
+          headers : {
+              'Authentication-Token' : this.$store.state.auth_token
+          }
+      })
+      if (res.ok){
+        this.professionals = await res.json()
+      }
+      }
+      ,
+        async approve(id) {
             // Add logic to block professional
+            const res = await fetch(location.origin + '/user_action/' + id, {
+              method: 'POST',
+              headers : {'Content-Type': 'application/json', 
+                  'Authentication-Token' : this.$store.state.auth_token
+                    },
+              body: 
+                    JSON.stringify({'role': 'professional', 'param':'Approve'})
+                   },
+              )
+              if (res.ok){
+                this.fetchProfessioinals()
+              }
+          },
+          async unblock(id) {
+            // Add logic to block professional
+            const res = await fetch(location.origin + '/user_action/' + id, {
+              method: 'POST',
+              headers : {'Content-Type': 'application/json', 
+                  'Authentication-Token' : this.$store.state.auth_token
+                    },
+              body: 
+                    JSON.stringify({'role': 'professional', 'param':'Unblock'})
+                   },
+              )
+              if (res.ok){
+                this.fetchProfessioinals()
+              }
+          },
+          async block(id) {
+            // Add logic to block professional
+            const res = await fetch(location.origin + '/user_action/' + id, {
+              method: 'POST',
+              headers : {'Content-Type': 'application/json', 
+                  'Authentication-Token' : this.$store.state.auth_token
+                    },
+              body: 
+                    JSON.stringify({'role': 'professional', 'param':'Block'})
+                   },
+              )
+              if (res.ok){
+                this.fetchProfessioinals()
+              }
           },
     },
     async mounted(){
-        const res = await fetch(location.origin + '/api/professionals', {
-            headers : {
-                'Authentication-Token' : this.$store.state.auth_token
-            }
-        })
-
-        this.professionals = await res.json()
+        this.fetchProfessioinals()
     },
     computed: {
       filteredProfessionals() { if (!this.requestQuery) return this.professionals; 

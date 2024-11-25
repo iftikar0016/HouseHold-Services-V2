@@ -46,6 +46,9 @@ class Customer(db.Model):
     address= db.Column(db.String(200))
     pincode=db.Column(db.Integer)
 
+    active = db.Column(db.Boolean, default = True)
+    is_blocked= db.Column(db.Boolean, default=False)
+
 class Professional(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
@@ -55,6 +58,9 @@ class Professional(db.Model):
     pincode=db.Column(db.Integer)
     phone_no=db.Column(db.Integer)
     service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
+
+    active = db.Column(db.Boolean, default = True)
+    is_blocked= db.Column(db.Boolean, default=False)
     
 class Service(db.Model):
     id = db.Column(db.Integer, primary_key=True)

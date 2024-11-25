@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import current_app as app, jsonify, render_template,  request, send_file
 from flask_security import auth_required, verify_password, hash_password
-from backend.models import Customer, Professional, Service, ServiceRequest, db
+from backend.models import Customer, Professional, Service, ServiceRequest, User, db
 from backend.celery.tasks import create_csv
 from celery.result import AsyncResult
 
@@ -154,3 +154,55 @@ def delete_service(id):
     db.session.delete(service)
     db.session.commit()
     return jsonify({"message" : "Service Deleted"}), 200
+
+
+@app.route('/user_action/<int:id>', methods=['POST'])
+def user_action(id):
+    user=User.query.get(id)
+    if not user: return jsonify({'error': 'User not found'}), 404
+    data = request.get_json()
+    param = data.get('param')
+    role = data.get('role')
+    if param == 'Approve':
+        if role == 'professional':
+            user.active = True
+            user.professional.active = True
+            db.session.commit()
+        else:
+            user.active = True
+            user.customer.active = True
+            db.session.commit()
+
+    if param == 'Block':
+        if role == 'professional':
+            user.is_blocked = True
+            user.professional.is_blocked = True
+            db.session.commit()
+        else:
+            user.is_blocked = True
+            user.customer.is_blocked = True
+            db.session.commit()
+
+    if param == 'Unblock':
+        if role == 'professional':
+            user.is_blocked = False
+            user.professional.is_blocked = False
+            db.session.commit()
+        else:
+            user.is_blocked = False
+            user.customer.is_blocked = False
+            db.session.commit()
+
+    return jsonify({"message" : "User Updated"}), 200
+
+
+@app.route('/service_remarks/<int:request_id>', methods=['POST'])
+def service_remarks(request_id):
+    req= ServiceRequest.query.get(request_id)
+    data= request.get_json()
+    remarks= data.get('remarks')
+    req.status = "closed"
+    req.remarks= remarks
+    req.date_of_completion = datetime.now()
+    db.session.commit()
+    return jsonify({"message" : "req Updated"}), 200

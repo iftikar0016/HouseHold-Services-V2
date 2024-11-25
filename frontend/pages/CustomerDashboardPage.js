@@ -1,3 +1,4 @@
+import ServiceRemarks from "../components/ServiceRemarks.js";
 import Services from "../components/Services.js";
 
 export default {
@@ -55,8 +56,7 @@ export default {
                                 </template>
                                 <template v-else>
                                     <button 
-                                        @click="closeService(service.id)" 
-                                        class="btn btn-sm btn-success"
+                                        @click="showModal(service)"
                                     >
                                         Close it?
                                     </button>
@@ -66,26 +66,49 @@ export default {
                     </tbody>
                 </table>
             </section>
+
+            <ServiceRemarks :service="selectedService" @save="updateService"></ServiceRemarks>
+
         </div>
     `,
 
     data() {
         return {
             requestQuery: '',
-            serviceHistory: [] // Array for service history
+            serviceHistory: [], // Array for service history
+            selectedService: null
         };
     },
 
     methods: {
-
-
-        async searchRequests() {
-            // API call for searching requests
-            const res = await fetch(`/search_req/${this.$store.state.user_id}?result=${this.requestQuery}`);
-            if (res.ok) {
-                this.serviceHistory = await res.json();
-            }
+        showModal(service) {
+            this.selectedService = service;
+            const modalElement = document.getElementById('serviceRemarksModal');
+            const modalInstance = new bootstrap.Modal(modalElement);
+            modalInstance.show();
         },
+        async updateService(updatedService) {
+            // Handle service update logic here
+            const res = await fetch(location.origin+'/service_remarks/' + this.selectedService.id, 
+              {method : 'POST', 
+                  headers: {'Content-Type' : 'application/json',
+                            'Authentication-Token': this.$store.state.auth_token
+                  }, 
+                  body : JSON.stringify(updatedService)
+              })
+
+              if (res.ok){
+                this.fetchServicesRequests()
+              }
+            },
+
+        // async searchRequests() {
+        //     // API call for searching requests
+        //     const res = await fetch(`/search_req/${this.$store.state.user_id}?result=${this.requestQuery}`);
+        //     if (res.ok) {
+        //         this.serviceHistory = await res.json();
+        //     }
+        // },
 
         async closeService(serviceId) {
             // API call to close a service
@@ -122,5 +145,6 @@ export default {
 
     components : {
         Services,
+        ServiceRemarks,
     }
 };

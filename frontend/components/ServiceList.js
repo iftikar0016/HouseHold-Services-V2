@@ -4,7 +4,7 @@ export default {
     template: `
         <div>
             <div class="card">
-                <div class="container mt-5">
+                <div class="tableMain">
                     <table class="table table-hover table-bordered">
                         <thead class="table-light">
                          

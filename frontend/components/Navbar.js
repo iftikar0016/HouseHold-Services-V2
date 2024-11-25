@@ -11,8 +11,8 @@ export default {
                 <div class="collapse navbar-collapse" id="navbarNav" >
                         <ul class="navbar-nav ms-auto" style="display: flex; justify-content: center; width: 100%; padding-right: 15%;" >
                            
-                                <router-link to='/admin' class="nav-link" v-if="$store.state.role=='admin'" >Home</router-link>
-                                <router-link to='/customer' class="nav-item" v-if="$store.state.role=='customer'" > Home</router-link>
+                                <router-link to='/admin' class="nav-link" v-if="$store.state.role=='admin'" ><li class="nav-item">Hello</li></router-link>
+                                <router-link to='/customer' class="nav-item" v-if="$store.state.role=='customer'" > <li class="nav-item">Hello</li></router-link>
                                 <router-link to='/professional' class="nav-link" v-if="$store.state.role=='professional'" ><li class="nav-item">Hello</li></router-link>
                            
                             <!-- <li class="nav-item"><a class="nav-link" href="/search">Search</a></li> -->

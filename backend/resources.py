@@ -13,6 +13,8 @@ customer_fields = {
     'fullname': fields.String,
     'address': fields.String,
     'pincode': fields.Integer,
+    'active': fields.Boolean,
+    'is_blocked': fields.Boolean,
 }
 
 professional_fields = {
@@ -23,6 +25,8 @@ professional_fields = {
     'pincode': fields.Integer,
     'phone_no': fields.Integer,
     'service_id': fields.Integer,
+    'active': fields.Boolean,
+    'is_blocked': fields.Boolean,
 }
 
 

@@ -1,7 +1,6 @@
 export default {
     template : `
         <div>
-            <p>Hello</p>
             <main style="margin: 30px;">
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style="padding: 20px;">
               <li class="nav-item" role="presentation">
@@ -33,7 +32,7 @@ export default {
                 :class="{ 'show active': activeTab === 'requested-services' }"
                 id="requested-services" 
                 role="tabpanel">
-                <div class="container mt-5">
+                <div class="tableMain">
                   <table class="table table-hover table-bordered">
                     <thead class="table-light">
                      
@@ -78,23 +77,24 @@ export default {
                 id="closed-services" 
                 role="tabpanel">
                 <div class="tableMain">
-                  <table class="table">
+                  <table class="table table-hover table-bordered">
                     <thead>
-                      <tr>
+                      
                         <th scope="col">ID</th>
                         <th scope="col">Customer Name</th>
                         <th scope="col">Date of Request</th>
-                        <th scope="col">Action</th>
-                      </tr>
+                        <th scope="col">Date of Completion</th>
+                        <th scope="col">Remarks</th>
+                      
                     </thead>
                     <tbody>
                       <tr v-for="(service, index) in closedServices" :key="service.id">
                         <th scope="row">{{ index + 1 }}</th>
                         <td>{{ service.customer_name }}</td>
                         <td>{{ service.date_of_request }}</td>
-                        <td>
-                          <button class="btn btn-sm btn-warning" @click="editService(service.id)">Edit</button>
-                        </td>
+                        <td>{{ service.date_of_completion }}</td>
+                        <td>{{ service.remarks }}</td>
+  
                       </tr>
                     </tbody>
                   </table>

@@ -79,7 +79,7 @@ export default {
       <form @submit.prevent="submitForm">
         <div class="form-group">
           <label for="service-name">Service Name:</label>
-          <input type="text" id="service-name" v-model="serviceName" name="service_name">
+          <input type="text" id="service-name" v-model="serviceName" name="service_name" required>
         </div>
         <div class="form-group">
           <label for="description">Description:</label>
@@ -87,11 +87,27 @@ export default {
         </div>
         <div class="form-group">
           <label for="base-price">Base Price:</label>
-          <input type="text" id="base-price" v-model="basePrice" name="base_price">
+          <input type="text" id="base-price" v-model="basePrice" name="base_price" required>
         </div>
         <div class="button-group">
-          <button type="submit" class="button add-button">Add</button>
-          <button type="button" class="button cancel-button" @click="cancelForm">Cancel</button>
+          <button type="submit" class="button-29" style="    width: 48%;
+            padding: 10px;
+            color: white;
+            border: none;
+            
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;">
+            Add</button>
+          <button type="button" class="button-30" style='    width: 48%;
+            padding: 10px;
+          
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;'
+          @click="cancelForm">Cancel
+          </button>
         </div>
       </form>
     </div>

@@ -27,7 +27,7 @@ with app.app_context():
         db.session.commit()
         
         # Create and add customer profile
-        customer1 = Customer(user_id=user.id, fullname="customer1")
+        customer1 = Customer(user_id=user.id, fullname="customer1", address="Lanka,Assam")
         db.session.add(customer1)
         db.session.commit()
 
@@ -39,7 +39,7 @@ with app.app_context():
         db.session.commit()
         
         # Create and add professional profile
-        professional1 = Professional(user_id=user.id,fullname="professional1", service_id=first_service.id)
+        professional1 = Professional(user_id=user.id,fullname="professional1", service_id=first_service.id, address="Lanka,Assam")
         db.session.add(professional1)
         db.session.commit()
     # db.session.commit()
