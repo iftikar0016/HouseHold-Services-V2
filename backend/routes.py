@@ -21,7 +21,7 @@ def getCSV(id):
     if result.ready():
         return send_file(f'./backend/celery/user-downloads/{result.result}'), 200
     else:
-        return {'message' : 'task not ready'}, 405
+        return {'message' : 'task not ready yet'}, 405
     
 @app.get('/create-csv/<id>')
 def createCSV(id):
@@ -50,7 +50,7 @@ def login():
         return jsonify({"message" : "invalid email"}), 404
     
     if verify_password(password, user.password):
-        return jsonify({'token' : user.get_auth_token(), 'email' : user.email, 'role' : user.roles[0].name, 'id' : user.id})
+        return jsonify({'token' : user.get_auth_token(), 'email' : user.email, 'role' : user.roles[0].name, 'id' : user.id}),200
     
     return jsonify({'message' : 'password wrong'}), 400
 

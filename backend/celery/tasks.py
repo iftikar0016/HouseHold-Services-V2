@@ -1,7 +1,9 @@
+from datetime import datetime, timedelta
 from celery import shared_task
+from flask import render_template
 import flask_excel
 from backend.celery.mail_service import send_email
-from backend.models import Professional, ServiceRequest, User, db
+from backend.models import Customer, Professional, ServiceRequest, User, db
 
 
 @shared_task(bind = True, ignore_result = True)
@@ -24,5 +26,24 @@ def req_reminder():
     results = db.session.query(User).join(ServiceRequest, User.id == ServiceRequest.professional_id).filter(ServiceRequest.status=='requested').all()
     print(results)
     for each in results:
-        send_email(str(each.email), 'reminder to login', '<h1> hello everyone </h1>')
+        send_email(str(each.email), 'Reminder to Accept/Reject Request', '<h1> hello everyone </h1>')
+
+@shared_task(ignore_result = True)
+def monthly_activity_report():
+    customers= db.session.query(Customer).all()
+    a_month_ago = datetime.now() - timedelta(days=30)
+    for customer in customers:
+        # service_requests=ServiceRequest.query.filter((ServiceRequest.customer_id==customer.user_id) & (ServiceRequest.date_of_request >= a_month_ago)).all()
+        data = (
+        db.session.query(ServiceRequest.status, db.func.count(ServiceRequest.id))
+        .filter((ServiceRequest.customer_id == customer.user_id) & (ServiceRequest.date_of_request >= a_month_ago))  # Filter for either customer or professional
+        .group_by(ServiceRequest.status)
+        .all()
+        )
+        labels = [row[0] for row in data]  
+        values = [row[1] for row in data]
+
+        html_code=render_template('monthly_reports.html',labels=labels,values=values)
+        
+        send_email(str(customer.user.email), html_code)
         
