@@ -11,11 +11,14 @@ import CustomerRegister from "../pages/CustomerRegisterPage.js";
 import ProfessionalRegister from "../pages/ProfessionalRegisterPage.js";
 import Profile from "../pages/Profile.js";
 import Summary from "../pages/Summary.js";
+import SearchCustomerPage from "../pages/SearchCustomerPage.js";
 
 const routes = [
     {path : '/', component : Home},
     {path : '/profile', component : Profile},
     {path : '/summary', component : Summary},
+    {path : '/search_customer', component : SearchCustomerPage},
+
     
     {path : '/login', component : LoginPage},
     {path : '/register', component : RegisterPage},

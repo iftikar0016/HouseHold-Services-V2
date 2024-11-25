@@ -25,7 +25,7 @@ export default {
                     >
                         <button 
                             @click="viewService(service.id)" 
-                            class="btn btn-outline-primary w-100 py-3"
+                            class="button-92"
                         >
                             {{ service.name }}
                         </button>

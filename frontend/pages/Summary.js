@@ -1,7 +1,7 @@
 export default {
 template:` 
- <div class="chart-container">
-    <h1>Service Request Chart</h1>
+ <div class="chart-container" style="margin-top:30px">
+    <h1>Service Requests Overview</h1>
     <canvas id="serviceChart" width="900" height="400"></canvas>
   </div>
   `
@@ -16,23 +16,37 @@ template:`
   },
   async mounted() {
     // Fetch the data from the backend
-    const res = await fetch(`${location.origin}/summary/${this.$store.state.user_id}`, {
-      headers: {
-        'Authentication-Token': this.$store.state.auth_token
+    if (this.$store.state.role=="admin"){
+      const res = await fetch(`${location.origin}/summary`, {
+        headers: {
+          'Authentication-Token': this.$store.state.auth_token
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        this.labels = data.labels;
+        this.values = data.values;
+        this.renderChart();
+    }else{
+      const res = await fetch(`${location.origin}/summary/${this.$store.state.user_id}`, {
+        headers: {
+          'Authentication-Token': this.$store.state.auth_token
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        this.labels = data.labels;
+        this.values = data.values;
+        this.renderChart();
       }
-    });
-    if (res.ok) {
-      const data = await res.json();
-      this.labels = data.labels;
-      this.values = data.values;
-      this.renderChart();
     }
+  }
   },
   methods: {
     renderChart() {
       const ctx = document.getElementById('serviceChart').getContext('2d');
       new Chart(ctx, {
-        type: 'pie', // Change to 'line', 'pie', etc. for different chart types
+        type: 'doughnut', // .......... 'line', 'pie', doughnut, bar, polarArea, radar
         data: {
           labels: this.labels,
           datasets: [{

@@ -1,4 +1,4 @@
-div{
+div,header{
   font-family: "Josefin Sans", serif;
 }
 
@@ -12,6 +12,12 @@ li{
   font-style: normal;
 }
 
+#serviceRemarksModalLabel,#editServiceModalLable{
+  font-family: "Josefin Sans", serif;
+}
+.navbar-brand{
+  font-family: "Josefin Sans", serif;
+}
 
 /* s
 
@@ -589,7 +595,7 @@ button:focus {
 --c: #fff;
 /* text color */
 background: linear-gradient(90deg, #0000 33%, #fff5, #0000 67%) var(--_p,100%)/300% no-repeat,
-  #520303;
+  #ca083f;
 /* background color */
 color: #0000;
 border: none;
@@ -615,7 +621,7 @@ transition: 0s;
 
 .button-92 {
 font-weight: bold;
-font-size: 2rem;
+font-size: 3rem;
 margin: 0;
 cursor: pointer;
 padding: .1em .3em;

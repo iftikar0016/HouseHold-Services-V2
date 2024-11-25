@@ -265,3 +265,16 @@ def graph(user_id):
     values = [row[1] for row in data]
     data = { 'labels': labels, 'values': values }
     return jsonify(data),200
+
+
+@app.route("/summary")
+def summary():
+    data = (
+        db.session.query(ServiceRequest.status, db.func.count(ServiceRequest.id))  
+        .group_by(ServiceRequest.status)
+        .all()
+    )
+    labels = [row[0] for row in data]  # Statuses 
+    values = [row[1] for row in data]
+    data = { 'labels': labels, 'values': values }
+    return jsonify(data),200
