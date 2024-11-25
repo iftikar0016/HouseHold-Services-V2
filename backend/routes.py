@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask import current_app as app, jsonify, render_template,  request, send_file
 from flask_security import auth_required, verify_password, hash_password
+from sqlalchemy import Integer
 from backend.models import Customer, Professional, Service, ServiceRequest, User, db
 from backend.celery.tasks import create_csv
 from celery.result import AsyncResult
@@ -206,3 +207,61 @@ def service_remarks(request_id):
     req.date_of_completion = datetime.now()
     db.session.commit()
     return jsonify({"message" : "req Updated"}), 200
+
+
+@app.route('/profile/<int:id>', methods=['GET','POST'])
+# @auth_required('token')
+def profile(id):
+    user=User.query.get(id)
+    if request.method=="POST":
+        data= request.get_json()
+        email= data.get('email')
+        password = data.get('password')
+        fullname = data.get('fullname')
+        address = data.get('address')
+        pincode = data.get('pincode')
+
+        if email !='':
+            user.email= email
+        if password != '':
+            user.password= password
+
+        if user.roles[0].name == "professional":
+            if pincode != '':
+                user.professional.pincode= int(pincode)
+            if fullname != '':
+                user.professional.fullname = fullname
+            if address != '':
+                user.professional.address = address
+            db.session.commit()
+
+        if user.roles[0].name == "customer":
+            if pincode != '':
+                user.customer.pincode= int(pincode)
+            if fullname != '':
+                user.customer.fullname = fullname
+            if address != '':
+                user.customer.address = address
+            db.session.commit()
+
+        return jsonify({"message" : "User Profile Updated"}), 200
+    
+    else:
+        if user.roles[0].name == "professional":
+            return jsonify({"email" : str(user.email), "password":str(user.password), "pincode":str(user.professional.pincode),"address":str(user.professional.address), "fullname":str(user.professional.fullname) }), 200
+        if user.roles[0].name == "customer":
+            return jsonify({"email" : str(user.email), "password":str(user.password), "pincode":str(user.customer.pincode),"address":str(user.customer.address), "fullname":str(user.customer.fullname) }), 200
+        
+
+@app.route("/summary/<int:user_id>")
+def graph(user_id):
+    data = (
+        db.session.query(ServiceRequest.status, db.func.count(ServiceRequest.id))
+        .filter((ServiceRequest.customer_id == user_id) | (ServiceRequest.professional_id == user_id))  # Filter for either customer or professional
+        .group_by(ServiceRequest.status)
+        .all()
+    )
+    labels = [row[0] for row in data]  # Statuses 
+    values = [row[1] for row in data]
+    data = { 'labels': labels, 'values': values }
+    return jsonify(data),200

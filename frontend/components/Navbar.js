@@ -16,9 +16,10 @@ export default {
                                 <router-link to='/professional' class="nav-link" v-if="$store.state.role=='professional'" ><li class="nav-item">Hello</li></router-link>
                            
                             <!-- <li class="nav-item"><a class="nav-link" href="/search">Search</a></li> -->
-                            <li class="nav-item"><a class="nav-link" href="/summary">Summary</a></li>
+                            <router-link to='/summary' class="nav-link" v-if="$store.state.role!=='admin'" ><li class="nav-item">Summary</li></router-link>
+
                             <!-- <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li> -->
-                            <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+                            <router-link to='/profile' class="nav-link" v-if="$store.state.role!=='admin'" ><li class="nav-item">Profile</li></router-link>
                         </ul>
                     </div>
    

@@ -94,7 +94,7 @@ export default {
                             <td>
                                 {{service.status}}
                             </td>
-                            <td>
+                            <td v-if="service.status=='closed'">
                                 <button class="btn" @click="create_csv(service.id)">Download</button>
                             </td>
                         </tr>

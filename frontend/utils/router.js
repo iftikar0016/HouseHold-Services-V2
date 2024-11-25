@@ -9,9 +9,14 @@ import ProfessionalDashboardPage from "../pages/ProfessionalDashboardPage.js";
 import ServiceProfessionals from "../pages/ServiceProfessionals.js";
 import CustomerRegister from "../pages/CustomerRegisterPage.js";
 import ProfessionalRegister from "../pages/ProfessionalRegisterPage.js";
+import Profile from "../pages/Profile.js";
+import Summary from "../pages/Summary.js";
 
 const routes = [
     {path : '/', component : Home},
+    {path : '/profile', component : Profile},
+    {path : '/summary', component : Summary},
+    
     {path : '/login', component : LoginPage},
     {path : '/register', component : RegisterPage},
     {path : '/customer_register', component : CustomerRegister},
