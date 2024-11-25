@@ -45,5 +45,5 @@ def monthly_activity_report():
 
         html_code=render_template('monthly_reports.html',labels=labels,values=values)
         
-        send_email(str(customer.user.email), html_code)
+        send_email(str(customer.user.email), 'Monthly Activity Report',html_code)
         
