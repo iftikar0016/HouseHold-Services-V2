@@ -6,8 +6,8 @@ from backend.celery.mail_service import send_email
 from backend.models import Customer, Professional, ServiceRequest, User, db
 
 
-@shared_task(bind = True, ignore_result = True)
-def create_csv(self, id):
+@shared_task(bind = True, ignore_result = False)
+def create_sr_csv(self, id):
     s_request = ServiceRequest.query.filter_by(id=id).all()
 
     task_id = self.request.id

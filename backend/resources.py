@@ -58,9 +58,9 @@ service_request_fields = {
         
 
 class ServiceListAPI(Resource):
-    # @cache.cached(timeout = 5, key_prefix = "service_list")
+    @cache.cached(timeout = 5, key_prefix = "service_list")
     @marshal_with(service_fields)
-    # @auth_required('token')
+    @auth_required('token')
     def get(self):
         services = Service.query.all()
         return services

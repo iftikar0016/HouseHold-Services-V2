@@ -22,8 +22,13 @@ export default {
                                 <td>{{ service.description }}</td>
                                 <td>₹ {{ service.price }}</td>
                                 <td>
-                                    <button class="button-30" @click="showModal(service)">Edit Service</button>
-                                    <button class="button-30" @click="deleteService(service.id)">Delete</button>
+                                    <div style="display:flex; justify-content: space-around" >
+                                        <button class="button-30" @click="showModal(service)">Edit Service</button>
+                                        <button class="button-30" @click="deleteService(service.id)">
+                                        <i class="fa-solid fa-trash-can" style="color: rgb(236, 236, 236);  font-size: 20px;"></i>
+                                        </button>
+                                    </div>
+
                                 </td>
                             </tr>
                         </tbody>

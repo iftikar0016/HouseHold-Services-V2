@@ -3,7 +3,7 @@ from flask import current_app as app, jsonify, redirect, render_template,  reque
 from flask_security import auth_required, verify_password, hash_password
 from sqlalchemy import Integer
 from backend.models import Customer, Professional, Service, ServiceRequest, User, db
-from backend.celery.tasks import create_csv
+from backend.celery.tasks import create_sr_csv
 from celery.result import AsyncResult
 
 datastore = app.security.datastore
@@ -14,19 +14,18 @@ cache = app.cache
 def home():
     return render_template('index.html')
 
-@app.get('/get-csv/<id>')
+@app.get('/get-sr-csv/<id>')
 def getCSV(id):
     result = AsyncResult(id)
-
     if result.ready():
         return send_file(f'./backend/celery/user-downloads/{result.result}'), 200
     else:
         return {'message' : 'task not ready yet'}, 405
     
-@app.get('/create-csv/<id>')
-@auth_required('token')
+@app.get('/create-sr-csv/<id>')
+# @auth_required('token')
 def createCSV(id):
-    task = create_csv.delay(id)
+    task = create_sr_csv.delay(id)
     return {'task_id' : task.id}, 200
 
 

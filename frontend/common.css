@@ -70,6 +70,7 @@ li{
 .table tbody td:last-child button {
   padding: 6px 10px;
   font-size: 14px;
+  font-family: "Rowdies", sans-serif;
   color: white;
   background-color: #040990;
   border: none;
