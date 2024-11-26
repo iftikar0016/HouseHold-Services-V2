@@ -16,7 +16,7 @@ import SearchCustomerPage from "../pages/SearchCustomerPage.js";
 import store from './store.js'
 
 const routes = [
-    {path : '/', component : Home},
+    {path : '/', redirect : 'login'},
     {path : '/profile', component : Profile, meta : {requiresLogin : true}},
     {path : '/summary', component : Summary, meta : {requiresLogin : true}},
     {path : '/search_customer', component : SearchCustomerPage, meta : {requiresLogin : true, role : "admin"}},

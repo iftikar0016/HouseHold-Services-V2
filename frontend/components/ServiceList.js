@@ -20,7 +20,7 @@ export default {
                                 <th scope="row">{{ index + 1 }}</th>
                                 <td>{{ service.name }}</td>
                                 <td>{{ service.description }}</td>
-                                <td>{{ service.price }}</td>
+                                <td>₹ {{ service.price }}</td>
                                 <td>
                                     <button class="button-30" @click="showModal(service)">Edit Service</button>
                                     <button class="button-30" @click="deleteService(service.id)">Delete</button>

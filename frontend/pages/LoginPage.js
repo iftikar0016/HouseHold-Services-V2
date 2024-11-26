@@ -39,26 +39,33 @@ export default {
                     method : 'POST', 
                     headers: {'Content-Type' : 'application/json'}, 
                     body : JSON.stringify({'email': this.email,'password': this.password})
-                })
-                if (res.ok){
-                    console.log('we are logged in')
+                }).then(async (res)=> {
                     const data = await res.json()
-                  
-                    localStorage.setItem('user', JSON.stringify(data))
-                    
-                    this.$store.commit('setUser')
-                    
-                    if (data.role =='admin'){
-                        this.$router.push('/admin')
-                    }
-                    else if (data.role =='customer'){
-                        this.$router.push('/customer')
-                    }
-                    else if (data.role =='professional'){
-                        this.$router.push('/professional')
-                    }
+                    if (res.ok){
+                        console.log('we are logged in')
+                      
+                        localStorage.setItem('user', JSON.stringify(data))
                         
-                }
+                        this.$store.commit('setUser')
+                        
+                        if (data.role =='admin'){
+                            this.$router.push('/admin')
+                        }
+                        else if (data.role =='customer'){
+                            this.$router.push('/customer')
+                        }
+                        else if (data.role =='professional'){
+                            this.$router.push('/professional')
+                        }
+                            
+                    }
+                    else{
+                        this.error = data.message
+                        alert(this.error)
+                    }    
+        })
+                
+            
             }
         }
     }

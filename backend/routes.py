@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import current_app as app, jsonify, render_template,  request, send_file
+from flask import current_app as app, jsonify, redirect, render_template,  request, send_file
 from flask_security import auth_required, verify_password, hash_password
 from sqlalchemy import Integer
 from backend.models import Customer, Professional, Service, ServiceRequest, User, db
@@ -24,15 +24,11 @@ def getCSV(id):
         return {'message' : 'task not ready yet'}, 405
     
 @app.get('/create-csv/<id>')
+@auth_required('token')
 def createCSV(id):
     task = create_csv.delay(id)
     return {'task_id' : task.id}, 200
 
-
-@app.get('/protected')
-@auth_required('token')
-def protected():
-    return '<h1> only accessible by auth user</h1>'
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -50,6 +46,8 @@ def login():
         return jsonify({"message" : "invalid email"}), 404
     
     if verify_password(password, user.password):
+        if not user.active or user.is_blocked: 
+            return jsonify({"message" : "user is inactive or blocked"}), 404
         return jsonify({'token' : user.get_auth_token(), 'email' : user.email, 'role' : user.roles[0].name, 'id' : user.id}),200
     
     return jsonify({'message' : 'password wrong'}), 400
@@ -75,13 +73,13 @@ def register():
         return jsonify({"message" : "user already exists"}), 404
 
     try :
-        user = datastore.create_user(email = email, password = hash_password(password), active = True)
+        user = datastore.create_user(email = email, password = hash_password(password), active = False)
         datastore.add_role_to_user(user, role)  
         db.session.commit()
         if user.roles[0].name == 'professional':
             service=data.get('service')
             phone_no=data.get('phone')
-            professional = Professional(user_id=user.id,  address=address, pincode=pincode, fullname= fullname, service_id=service, phone_no=phone_no)
+            professional = Professional(user_id=user.id, active = False,  address=address, pincode=pincode, fullname= fullname, service_id=service, phone_no=phone_no)
             db.session.add(professional)
             db.session.commit()
             return jsonify({"message" : "prof created"}), 200
@@ -96,6 +94,7 @@ def register():
     
 
 @app.route('/add_service', methods=['GET','POST'])
+@auth_required('token')
 def addService():
     if request.method=="POST":
         ServiceName= request.form.get('service_name')
@@ -107,6 +106,7 @@ def addService():
         return jsonify({"message" : "service added"}), 200
     
 @app.route('/service_request/<int:user_id>/<int:professional_id>', methods=['GET'])
+@auth_required('token')
 def service_request(user_id, professional_id):
     # ServiceRequest=ServiceRequest.query.filter_by(id=id).first()
     professional=Professional.query.filter_by(user_id=professional_id).first()
@@ -119,6 +119,7 @@ def service_request(user_id, professional_id):
 
 
 @app.route('/accept_req/<int:id>')
+@auth_required('token')
 def accept_req(id):
     req= ServiceRequest.query.get(id)
     req.status = "accepted"
@@ -126,6 +127,7 @@ def accept_req(id):
     return jsonify({"message" : "New Service Request Accepted"}), 200
 
 @app.route('/reject_req/<int:id>')
+@auth_required('token')
 def reject_req(id):
     req= ServiceRequest.query.get(id)
     req.status = "rejected"
@@ -133,6 +135,7 @@ def reject_req(id):
     return jsonify({"message" : "New Service Request Rejected"}), 200
 
 @app.route('/editservice/<int:id>', methods=['POST'])
+@auth_required('token')
 def editService(id):
     data = request.get_json()
     service=Service.query.filter_by(id=id).first()
@@ -150,6 +153,7 @@ def editService(id):
     return jsonify({"message" : "Service Edited"}), 200
 
 @app.route('/delete_service/<int:id>')
+@auth_required('token')
 def delete_service(id):
     service=Service.query.filter_by(id=id).first()
     db.session.delete(service)
@@ -158,6 +162,7 @@ def delete_service(id):
 
 
 @app.route('/user_action/<int:id>', methods=['POST'])
+@auth_required('token')
 def user_action(id):
     user=User.query.get(id)
     if not user: return jsonify({'error': 'User not found'}), 404
@@ -198,6 +203,7 @@ def user_action(id):
 
 
 @app.route('/service_remarks/<int:request_id>', methods=['POST'])
+@auth_required('token')
 def service_remarks(request_id):
     req= ServiceRequest.query.get(request_id)
     data= request.get_json()
@@ -210,7 +216,7 @@ def service_remarks(request_id):
 
 
 @app.route('/profile/<int:id>', methods=['GET','POST'])
-# @auth_required('token')
+@auth_required('token')
 def profile(id):
     user=User.query.get(id)
     if request.method=="POST":
@@ -254,6 +260,7 @@ def profile(id):
         
 
 @app.route("/summary/<int:user_id>")
+@auth_required('token')
 def graph(user_id):
     data = (
         db.session.query(ServiceRequest.status, db.func.count(ServiceRequest.id))
@@ -268,6 +275,7 @@ def graph(user_id):
 
 
 @app.route("/summary")
+@auth_required('token')
 def summary():
     data = (
         db.session.query(ServiceRequest.status, db.func.count(ServiceRequest.id))  

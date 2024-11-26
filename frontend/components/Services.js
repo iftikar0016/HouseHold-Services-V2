@@ -45,7 +45,13 @@ export default {
     methods: {
         async searchServices() {
             // API call for searching services
-            const res = await fetch(`/search_service/${this.$store.state.user_id}?result=${this.searchQuery}`);
+            const res = await fetch(`/search_service/${this.$store.state.user_id}?result=${this.searchQuery}`,
+                {
+                    headers: {
+                        'Authentication-Token': this.$store.state.auth_token
+                    }
+                }
+            );
             if (res.ok) {
                 this.services = await res.json();
             }

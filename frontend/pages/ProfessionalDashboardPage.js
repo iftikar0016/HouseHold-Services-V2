@@ -112,8 +112,8 @@ export default {
 ,
 data() {
     return {
-      activeTab: 'requested-services', // Tracks which tab is active
-      services: [], // All services fetched from the API
+      activeTab: 'requested-services', // tracks which tab is active
+      services: [], // services fetched fromm the api....
     };
   },
   computed: {
@@ -142,25 +142,32 @@ data() {
       }
     },
     async acceptService(serviceId) {
-      const res = await fetch(`/accept_req/${serviceId}`, { method: 'GET' });
+      const res = await fetch(`/accept_req/${serviceId}`, { method: 'GET',
+        headers: {
+          'Authentication-Token': this.$store.state.auth_token
+      }
+       });
       if (res.ok) {
           console.log(`Accepted service with ID: ${serviceId}`);
-          this.fetchServices(); // Refresh service history
+          this.fetchServices(); 
       }
-      // Call API to update service status
+      
     },
     async rejectService(serviceId) {
       
-      // Call API to update service status
-      const res = await fetch(`/reject_req/${serviceId}`, { method: 'GET' });
+      const res = await fetch(`/reject_req/${serviceId}`, { method: 'GET',
+        headers: {
+          'Authentication-Token': this.$store.state.auth_token
+      }
+       });
       if (res.ok) {
           console.log(`Accepted service with ID: ${serviceId}`);
-          this.fetchServices(); // Refresh service history
+          this.fetchServices(); 
       }
     },
     editService(serviceId) {
       console.log(`Editing service with ID: ${serviceId}`);
-      // Open modal or redirect to edit page
+      // Opens modal.... 
     },
   },
   mounted() {

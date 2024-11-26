@@ -11,14 +11,14 @@
     <canvas id="serviceChart" width="900" height="400"></canvas>
     
     <script>
-        // Get data passed from the backend
+        // here data passed from the backend....
         const labels = {{ labels|tojson }};
         const values = {{ values|tojson }};
 
-        // Create the chart
+        // this creates charts.....
         const ctx = document.getElementById('serviceChart').getContext('2d');
         const serviceChart = new Chart(ctx, {
-            type: 'pie', // Change to 'line', 'pie', etc. for different chart types
+            type: 'pie', 
             data: {
                 labels: labels, // X-axis labels
                 datasets: [{

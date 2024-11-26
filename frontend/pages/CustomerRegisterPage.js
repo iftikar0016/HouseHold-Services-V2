@@ -63,7 +63,7 @@ export default {
                 console.log('Registration successful');
                 this.$router.push('/login')
               } else {
-                // Handle errors
+                
                 console.error('Registration failed');
               }
             } catch (error) {

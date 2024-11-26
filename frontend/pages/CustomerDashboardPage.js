@@ -75,7 +75,7 @@ export default {
     data() {
         return {
             requestQuery: '',
-            serviceHistory: [], // Array for service history
+            serviceHistory: [], 
             selectedService: null
         };
     },
@@ -88,7 +88,7 @@ export default {
             modalInstance.show();
         },
         async updateService(updatedService) {
-            // Handle service update logic here
+           
             const res = await fetch(location.origin+'/service_remarks/' + this.selectedService.id, 
               {method : 'POST', 
                   headers: {'Content-Type' : 'application/json',
@@ -110,15 +110,6 @@ export default {
         //     }
         // },
 
-        async closeService(serviceId) {
-            // API call to close a service
-            const res = await fetch(`/service_remarks/${serviceId}`, { method: 'POST' });
-            if (res.ok) {
-                console.log(`Service ${serviceId} closed successfully`);
-                this.fetchServiceHistory(); // Refresh service history
-            }
-        },
-
         // All Service Requests History of User
         async fetchServicesRequests() {
             const res = await fetch(location.origin + '/api/services_requests/' + `${this.$store.state.user_id}`, {
@@ -139,7 +130,7 @@ export default {
       },
 
     async mounted() {
-        // Fetch initial data for services and service history
+        
         await this.fetchServicesRequests()
     },
 
