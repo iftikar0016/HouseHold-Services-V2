@@ -112,7 +112,7 @@ def service_request(user_id, professional_id):
     professional=Professional.query.filter_by(user_id=professional_id).first()
     service=Service.query.get(professional.service_id)
     user=Customer.query.filter_by(user_id=user_id).first()
-    new_service_request = ServiceRequest(service_name=service.name, customer_name=user.fullname, professional_name=professional.fullname ,service_id=professional.service_id, customer_id=user.user_id, professional_id=professional.user_id,date_of_request=datetime.now() )
+    new_service_request = ServiceRequest(service_name=service.name, customer_name=user.fullname, professional_name=professional.fullname ,service_id=professional.service_id, customer_id=user.user_id, professional_id=professional.user_id,date_of_request=datetime.now(), address=user.address )
     db.session.add(new_service_request)
     db.session.commit()
     return jsonify({"message" : "New Service Request added"}), 200

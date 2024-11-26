@@ -27,6 +27,7 @@ template:`
         this.labels = data.labels;
         this.values = data.values;
         this.renderChart();
+    }
     }else{
       const res = await fetch(`${location.origin}/summary/${this.$store.state.user_id}`, {
         headers: {
@@ -41,7 +42,7 @@ template:`
       }
     }
   }
-  },
+  ,
   methods: {
     renderChart() {
       const ctx = document.getElementById('serviceChart').getContext('2d');

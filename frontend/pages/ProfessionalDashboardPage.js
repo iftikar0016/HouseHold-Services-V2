@@ -38,6 +38,7 @@ export default {
                      
                         <th scope="col">ID</th>
                         <th scope="col">Customer Name</th>
+                        <th scope="col">Location</th>
                         <th scope="col">Date of Request</th>
                         <th scope="col">Action</th>
                       
@@ -46,6 +47,7 @@ export default {
                       <tr v-for="(service, index) in requestedServices" :key="service.id">
                         <th scope="row">{{ index + 1 }}</th>
                         <td>{{ service.customer_name }}</td>
+                        <td>{{ service.address }}</td>
                         <td>{{ service.date_of_request }}</td>
                         <td>
                           <template v-if="service.status === 'requested'">
@@ -82,6 +84,7 @@ export default {
                       
                         <th scope="col">ID</th>
                         <th scope="col">Customer Name</th>
+                        <th scope="col">Location</th>
                         <th scope="col">Date of Request</th>
                         <th scope="col">Date of Completion</th>
                         <th scope="col">Remarks</th>
@@ -91,6 +94,7 @@ export default {
                       <tr v-for="(service, index) in closedServices" :key="service.id">
                         <th scope="row">{{ index + 1 }}</th>
                         <td>{{ service.customer_name }}</td>
+                        <td>{{ service.address }}</td>
                         <td>{{ service.date_of_request }}</td>
                         <td>{{ service.date_of_completion }}</td>
                         <td>{{ service.remarks }}</td>

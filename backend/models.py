@@ -15,6 +15,7 @@ class ServiceRequest(db.Model):
     date_of_completion = db.Column(db.DateTime)
     status = db.Column(db.String(25), default="requested")
     remarks = db.Column(db.String(250))
+    address= db.Column(db.String(200))
 
 class User(db.Model, UserMixin):
     id=db.Column(db.Integer, primary_key=True)

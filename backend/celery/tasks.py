@@ -23,10 +23,10 @@ def create_csv(self, id):
 
 @shared_task(ignore_result = True)
 def req_reminder():
-    results = db.session.query(User).join(ServiceRequest, User.id == ServiceRequest.professional_id).filter(ServiceRequest.status=='requested').all()
-    print(results)
-    for each in results:
-        send_email(str(each.email), 'Reminder to Accept/Reject Request', '<h1> hello everyone </h1>')
+    results = db.session.query(User, ServiceRequest).join(ServiceRequest, User.id == ServiceRequest.professional_id).filter(ServiceRequest.status=='requested').all()
+    # results= ServiceRequest.query.filter_by(status="requested").all()
+    for user, req in results:
+        send_email(str(user.email), 'Reminder to Accept/Reject Request', render_template('req_remainder.html', req=req))
 
 @shared_task(ignore_result = True)
 def monthly_activity_report():

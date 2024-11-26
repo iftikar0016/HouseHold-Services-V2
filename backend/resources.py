@@ -51,6 +51,7 @@ service_request_fields = {
     'date_of_completion': fields.DateTime,
     'status': fields.String,
     'remarks': fields.String,
+    'address': fields.String,
 }
 
 
