@@ -168,6 +168,15 @@ def delete_service(id):
     cache.clear()
     return jsonify({"message" : "Service Deleted"}), 200
 
+@app.route('/cancel_service/<int:id>')
+@auth_required('token')
+def cancel_service(id):
+    service=ServiceRequest.query.filter_by(id=id).first()
+    db.session.delete(service)
+    db.session.commit()
+    cache.clear()
+    return jsonify({"message" : "Service Request Canceled"}), 200
+
 
 @app.route('/user_action/<int:id>', methods=['POST'])
 @auth_required('token')

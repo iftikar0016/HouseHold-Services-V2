@@ -52,10 +52,10 @@ export default {
                                     Rejected
                                 </template>
                                 <template v-else-if="service.status === 'requested'">
-                                    Requested
+                                    <button @click="cancelService(service.id)" class="button-30" style='color:black; background-color:white'>Cancel it?</button>
                                 </template>
                                 <template v-else>
-                                    <button 
+                                    <button class='button-29'
                                         @click="showModal(service)"
                                     >
                                         Close it?
@@ -76,7 +76,7 @@ export default {
         return {
             requestQuery: '',
             serviceHistory: [], 
-            selectedService: null
+            selectedService: 'null'
         };
     },
 
@@ -98,9 +98,23 @@ export default {
               })
 
               if (res.ok){
+                alert(res.json().message)
                 this.fetchServicesRequests()
               }
             },
+            async cancelService(id) {
+           
+                const res = await fetch(location.origin+'/cancel_service/' + id, 
+                  {
+                      headers: {'Content-Type' : 'application/json',
+                                'Authentication-Token': this.$store.state.auth_token
+                      }, 
+                  })
+    
+                  if (res.ok){
+                    this.fetchServicesRequests()
+                  }
+                },
 
         // async searchRequests() {
         //     // API call for searching requests
