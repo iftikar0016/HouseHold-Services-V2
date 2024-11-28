@@ -52,12 +52,12 @@ export default {
                         <td>
                           <template v-if="service.status === 'requested'">
                             <button 
-                              class="btn btn-sm btn-success" 
+                              class='button-29'
                               @click="acceptService(service.id)">
                               Accept
                             </button>
                             <button 
-                              class="btn btn-sm btn-danger" 
+                              style="background-color:red; margin-left:10px" class='button-30' 
                               @click="rejectService(service.id)">
                               Reject
                             </button>

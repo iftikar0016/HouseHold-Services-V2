@@ -58,6 +58,7 @@ class Professional(db.Model):
     address= db.Column(db.String(200))
     pincode=db.Column(db.Integer)
     phone_no=db.Column(db.Integer)
+    experience=db.Column(db.Integer)
     service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
 
     active = db.Column(db.Boolean, default = True)

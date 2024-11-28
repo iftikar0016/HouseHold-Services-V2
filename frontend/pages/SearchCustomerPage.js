@@ -36,8 +36,8 @@ export default {
                 <td>{{ prof.pincode }}</td>
                 <td>
                   <button v-if="prof.active==false" @click='approve(prof.user_id)'>Approve</button>
-                  <button v-else-if="prof.is_blocked==false" @click='block(prof.user_id)'>Block</button>
-                  <button v-else="prof.is_blocked==false" @click='unblock(prof.user_id)'>UnBlock</button>
+                  <button style="background-color:red" class='button-30' v-else-if="prof.is_blocked==false" @click='block(prof.user_id)'>Block</button>
+                  <button style="background-color:#bd8e00d6" class='button-30' v-else="prof.is_blocked==false" @click='unblock(prof.user_id)'>UnBlock</button>
                 </td>
               </tr>
             </tbody>

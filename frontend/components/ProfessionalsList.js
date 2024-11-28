@@ -21,7 +21,9 @@ export default {
           
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
-                <th scope="col">Service ID</th>
+                <th scope="col">ServiceID</th>
+                <th scope="col">Experience</th>
+                <th scope="col">Address</th>
                 <th scope="col">Pin Code</th>
                 <th scope="col">Action</th>
             
@@ -31,11 +33,14 @@ export default {
                 <th scope="row">{{ index + 1 }}</th>
                 <td>{{ prof.fullname }}</td>
                 <td>{{ prof.service_id }}</td>
+                <td>{{ prof.experience }}</td>
+                <td>{{ prof.address }}</td>
                 <td>{{ prof.pincode }}</td>
                 <td>
-                  <button v-if="prof.active==false" @click='approve(prof.user_id)'>Approve</button>
-                  <button v-else-if="prof.is_blocked==false" @click='block(prof.user_id)'>Block</button>
-                  <button v-else="prof.is_blocked==false" @click='unblock(prof.user_id)'>UnBlock</button>
+                  <button class='button-29' v-if="prof.active==false" @click='approve(prof.user_id)'>Approve</button>
+                  <button class='button-29' v-if="prof.active==false" @click='reject(prof.user_id)'>Reject</button>
+                  <button style="background-color:red" class='button-30' v-else-if="prof.is_blocked==false" @click='block(prof.user_id)'>Block</button>
+                  <button style="background-color:#bd8e00d6" class='button-30' v-else @click='unblock(prof.user_id)'>Unblock</button>
                 </td>
               </tr>
             </tbody>
@@ -63,7 +68,7 @@ export default {
       }
       ,
         async approve(id) {
-            // Add logic to block professional
+           
             const res = await fetch(location.origin + '/user_action/' + id, {
               method: 'POST',
               headers : {'Content-Type': 'application/json', 
@@ -77,8 +82,23 @@ export default {
                 this.fetchProfessioinals()
               }
           },
+          async reject(id) {
+           
+            const res = await fetch(location.origin + '/user_action/' + id, {
+              method: 'POST',
+              headers : {'Content-Type': 'application/json', 
+                  'Authentication-Token' : this.$store.state.auth_token
+                    },
+              body: 
+                    JSON.stringify({'role': 'professional', 'param':'Reject'})
+                   },
+              )
+              if (res.ok){
+                this.fetchProfessioinals()
+              }
+          },
           async unblock(id) {
-            // Add logic to block professional
+            
             const res = await fetch(location.origin + '/user_action/' + id, {
               method: 'POST',
               headers : {'Content-Type': 'application/json', 
@@ -93,7 +113,7 @@ export default {
               }
           },
           async block(id) {
-            // Add logic to block professional
+           
             const res = await fetch(location.origin + '/user_action/' + id, {
               method: 'POST',
               headers : {'Content-Type': 'application/json', 

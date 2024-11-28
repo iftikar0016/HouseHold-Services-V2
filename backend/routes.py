@@ -77,22 +77,25 @@ def register():
         db.session.commit()
         if user.roles[0].name == 'professional':
             service=data.get('service')
+            experience=data.get('experience')
             phone_no=data.get('phone')
-            professional = Professional(user_id=user.id, active = False,  address=address, pincode=pincode, fullname= fullname, service_id=service, phone_no=phone_no)
+            professional = Professional(user_id=user.id, active = False,  address=address, pincode=pincode, fullname= fullname, service_id=service, phone_no=phone_no,experience=experience)
             db.session.add(professional)
             db.session.commit()
+            cache.clear()
             return jsonify({"message" : "prof created"}), 200
         
         customer = Customer(user_id=user.id,  address=address, pincode=pincode, fullname= fullname)
         db.session.add(customer)
         db.session.commit()
+        cache.clear()
         return jsonify({"message" : "customer created"}), 200
     except:
         db.session.rollback()
         return jsonify({"message" : "error creating user"}), 400
     
 
-@app.route('/add_service', methods=['GET','POST'])
+@app.route('/add_service', methods=['POST'])
 @auth_required('token')
 def addService():
     if request.method=="POST":
@@ -102,6 +105,7 @@ def addService():
         new_service = Service( name= ServiceName , price= BasePrice, description=description )
         db.session.add(new_service)
         db.session.commit()
+        cache.clear()
         return jsonify({"message" : "service added"}), 200
     
 @app.route('/service_request/<int:user_id>/<int:professional_id>', methods=['GET'])
@@ -114,6 +118,7 @@ def service_request(user_id, professional_id):
     new_service_request = ServiceRequest(service_name=service.name, customer_name=user.fullname, professional_name=professional.fullname ,service_id=professional.service_id, customer_id=user.user_id, professional_id=professional.user_id,date_of_request=datetime.now(), address=user.address )
     db.session.add(new_service_request)
     db.session.commit()
+    cache.clear()
     return jsonify({"message" : "New Service Request added"}), 200
 
 
@@ -123,6 +128,7 @@ def accept_req(id):
     req= ServiceRequest.query.get(id)
     req.status = "accepted"
     db.session.commit()
+    cache.clear()
     return jsonify({"message" : "New Service Request Accepted"}), 200
 
 @app.route('/reject_req/<int:id>')
@@ -131,6 +137,7 @@ def reject_req(id):
     req= ServiceRequest.query.get(id)
     req.status = "rejected"
     db.session.commit()
+    cache.clear()
     return jsonify({"message" : "New Service Request Rejected"}), 200
 
 @app.route('/editservice/<int:id>', methods=['POST'])
@@ -149,6 +156,7 @@ def editService(id):
     if BasePrice != '':
         service.price= BasePrice
     db.session.commit()
+    cache.clear()
     return jsonify({"message" : "Service Edited"}), 200
 
 @app.route('/delete_service/<int:id>')
@@ -157,6 +165,7 @@ def delete_service(id):
     service=Service.query.filter_by(id=id).first()
     db.session.delete(service)
     db.session.commit()
+    cache.clear()
     return jsonify({"message" : "Service Deleted"}), 200
 
 
@@ -178,6 +187,18 @@ def user_action(id):
             user.customer.active = True
             db.session.commit()
 
+    if param == 'Reject':
+        if role == 'professional':
+            prof=Professional.query.filter_by(user_id=id).first()
+            db.session.delete(prof)
+            db.session.delete(user)
+            db.session.commit()
+        else:
+            customer=Customer.query.filter_by(user_id=id).first()
+            db.session.delete(customer)
+            db.session.delete(user)
+            db.session.commit()
+
     if param == 'Block':
         if role == 'professional':
             user.is_blocked = True
@@ -197,7 +218,7 @@ def user_action(id):
             user.is_blocked = False
             user.customer.is_blocked = False
             db.session.commit()
-
+    cache.clear()
     return jsonify({"message" : "User Updated"}), 200
 
 
@@ -211,6 +232,7 @@ def service_remarks(request_id):
     req.remarks= remarks
     req.date_of_completion = datetime.now()
     db.session.commit()
+    cache.clear()
     return jsonify({"message" : "req Updated"}), 200
 
 
@@ -248,7 +270,7 @@ def profile(id):
             if address != '':
                 user.customer.address = address
             db.session.commit()
-
+        cache.clear()
         return jsonify({"message" : "User Profile Updated"}), 200
     
     else:
@@ -260,7 +282,7 @@ def profile(id):
 
 @app.route("/summary/<int:user_id>")
 @auth_required('token')
-def graph(user_id):
+def userSummary(user_id):
     data = (
         db.session.query(ServiceRequest.status, db.func.count(ServiceRequest.id))
         .filter((ServiceRequest.customer_id == user_id) | (ServiceRequest.professional_id == user_id))  # Filter for either customer or professional
@@ -275,7 +297,7 @@ def graph(user_id):
 
 @app.route("/summary")
 @auth_required('token')
-def summary():
+def adminSummary():
     data = (
         db.session.query(ServiceRequest.status, db.func.count(ServiceRequest.id))  
         .group_by(ServiceRequest.status)

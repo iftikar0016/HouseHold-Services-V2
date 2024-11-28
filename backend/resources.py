@@ -27,6 +27,7 @@ professional_fields = {
     'service_id': fields.Integer,
     'active': fields.Boolean,
     'is_blocked': fields.Boolean,
+    'experience': fields.Integer,
 }
 
 
@@ -60,7 +61,6 @@ service_request_fields = {
 class ServiceListAPI(Resource):
     @cache.cached(timeout = 5, key_prefix = "service_list")
     @marshal_with(service_fields)
-    @auth_required('token')
     def get(self):
         services = Service.query.all()
         return services
@@ -75,55 +75,57 @@ class ServiceListAPI(Resource):
         new_service = Service(name=name, price=price, description=description)
         db.session.add(new_service)
         db.session.commit()
-        return jsonify({'message' : 'New service added'})
+        return jsonify({'message' : 'New service added'}),200
     
 
 # ProfessionalListAPI
 class ProfessionalListAPI(Resource):
-    @marshal_with(professional_fields)
     @auth_required('token')
+    @cache.cached(timeout = 5, key_prefix = "professional_list")
+    @marshal_with(professional_fields)
     def get(self):
         professionals = Professional.query.all()
         return professionals
 
 # professionals for specific service
 class ServiceProfessionalsAPI(Resource):
-    @marshal_with(professional_fields)
     @auth_required('token')
+    @cache.memoize(timeout = 5)
+    @marshal_with(professional_fields)
     def get(self,service_id):
         professionals = Professional.query.filter_by(service_id=service_id).all()
         return professionals
 
 # CustomerListAPI
 class CustomerListAPI(Resource):
-    @marshal_with(customer_fields)
     @auth_required('token')
+    @cache.cached(timeout = 5, key_prefix = "customer_list")
+    @marshal_with(customer_fields)
     def get(self):
         customers = Customer.query.all()
         return customers
 
 
 class ServiceRequestAPI(Resource):
-    @marshal_with(service_request_fields)
     @auth_required('token')
+    @cache.cached(timeout = 5, key_prefix = "customer_list")
+    @marshal_with(service_request_fields)
     def get(self):
         service_requests = ServiceRequest.query.all()
         return service_requests
 
-
-api.add_resource(ServiceRequestAPI, '/service_requests')
-api.add_resource(CustomerListAPI, '/customers')
-api.add_resource(ProfessionalListAPI, '/professionals')
-api.add_resource(ServiceListAPI, '/services')
-
-api.add_resource(ServiceProfessionalsAPI, '/service/<int:service_id>/professionals')
-
 class UserServiceRequestAPI(Resource):
-    # @auth_required('token')
-    # @cache.memoize(timeout = 5)
+    @auth_required('token')
+    @cache.memoize(timeout = 5)
     @marshal_with(service_request_fields)
     def get(self, user_id):
         service_requests = ServiceRequest.query.filter_by(customer_id=user_id).all()
         prof_requests = ServiceRequest.query.filter_by(professional_id=user_id).all()
         return service_requests + prof_requests
+
+api.add_resource(ServiceRequestAPI, '/service_requests')
+api.add_resource(CustomerListAPI, '/customers')
+api.add_resource(ProfessionalListAPI, '/professionals')
+api.add_resource(ServiceListAPI, '/services')
+api.add_resource(ServiceProfessionalsAPI, '/service/<int:service_id>/professionals')
 api.add_resource(UserServiceRequestAPI, '/services_requests/<int:user_id>')

@@ -95,7 +95,7 @@ export default {
                                 {{service.status}}
                             </td>
                             <td v-if="service.status=='closed'">
-                                <button class="btn" @click="create_csv(service.id)">Download</button>
+                                <button class="button-30" @click="create_csv(service.id)">Download CSV</button>
                             </td>
                         </tr>
                     </tbody>
