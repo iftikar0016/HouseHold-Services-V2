@@ -75,6 +75,7 @@ class ServiceListAPI(Resource):
         new_service = Service(name=name, price=price, description=description)
         db.session.add(new_service)
         db.session.commit()
+        cache.clear()
         return jsonify({'message' : 'New service added'}),200
     
 

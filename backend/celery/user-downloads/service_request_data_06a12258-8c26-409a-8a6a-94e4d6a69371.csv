@@ -1,2 +1,0 @@
-id,customer_name,professional_name,service_name,service_id,customer_id,professional_id,date_of_request,date_of_completion,status,remarks,address
-6,customer1,professional1,Plumbing,1,2,3,2024-11-26T13:51:57.270858,2024-11-26T14:02:38.318880,closed,asdfasdfaaaaaaaaaaaa,"Lanka,Assam"

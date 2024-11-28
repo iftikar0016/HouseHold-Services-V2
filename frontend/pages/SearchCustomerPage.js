@@ -1,7 +1,7 @@
 export default {
     template :`
      <div class="container mt-4">
-        <h3>Manage Professionals</h3>
+        <h3>Manage Customer</h3>
           <!-- search box -->
           <form @submit.prevent="searchRequests" style="padding: 30px 200px 0 300px;">
           <div class="input-group mb-3">

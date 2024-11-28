@@ -10,7 +10,7 @@ celery_app = app.extensions['celery']
 def setup_periodic_tasks(sender, **kwargs):
     # every 10 seconds
     # sender.add_periodic_task(10.0, monthly_activity_report.s() , name="checking for monthly report" )
-    # sender.add_periodic_task(4.0, req_reminder.s(), name='checking for daily reminder' )
+    sender.add_periodic_task(4.0, req_reminder.s(), name='checking for daily reminder' )
 
     # # daily message at 12:30 pm, everyday
     sender.add_periodic_task(crontab(hour=12, minute=30), req_reminder.s(), name='daily reminder' )
