@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         async fetchProfessionals() {
-            const res = await fetch(`/api/service/${this.service_id}/professionals` , {
+            const res = await fetch(`/api/service/${this.service_id}/professionals/${this.user_id}` , {
                 headers: {
                     'Authentication-Token': this.$store.state.auth_token
                 }

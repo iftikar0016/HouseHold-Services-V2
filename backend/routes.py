@@ -72,10 +72,9 @@ def register():
         return jsonify({"message" : "user already exists"}), 404
 
     try :
-        user = datastore.create_user(email = email, password = hash_password(password), active = False)
-        datastore.add_role_to_user(user, role)  
-        db.session.commit()
-        if user.roles[0].name == 'professional':
+        if role == 'professional':
+            user = datastore.create_user(email = email, password = hash_password(password), active = False)
+            datastore.add_role_to_user(user, role) 
             service=data.get('service')
             experience=data.get('experience')
             phone_no=data.get('phone')
@@ -85,6 +84,8 @@ def register():
             cache.clear()
             return jsonify({"message" : "prof created"}), 200
         
+        user = datastore.create_user(email = email, password = hash_password(password), active = True)
+        datastore.add_role_to_user(user, role) 
         customer = Customer(user_id=user.id,  address=address, pincode=pincode, fullname= fullname)
         db.session.add(customer)
         db.session.commit()

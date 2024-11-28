@@ -17,7 +17,7 @@ export default {
                     </div>
                 </form>
                 <h2 style="padding-bottom: 5px; display: flex; justify-content: center;">All Available Services</h2>
-                <div class="row g-3">
+                <div class="row g-3" style="display: flex; justify-content: center">
                     <div 
                         v-for="service in filteredServices" 
                         :key="service.id" 
@@ -38,13 +38,12 @@ export default {
     data() {
         return {
             searchQuery: '',
-            services: [], // Array for "Looking For?" section
+            services: [], 
         };
     },
 
     methods: {
         async searchServices() {
-            // API call for searching services
             const res = await fetch(`/search_service/${this.$store.state.user_id}?result=${this.searchQuery}`,
                 {
                     headers: {
@@ -58,7 +57,6 @@ export default {
         },
 
         async viewService(serviceId) {
-            // Navigate to service details
             this.$router.push(`/service/${serviceId}/${this.$store.state.user_id}`);
         },
 

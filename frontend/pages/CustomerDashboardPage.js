@@ -98,7 +98,6 @@ export default {
               })
 
               if (res.ok){
-                alert(res.json().message)
                 this.fetchServicesRequests()
               }
             },

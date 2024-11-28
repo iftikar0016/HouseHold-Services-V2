@@ -21,7 +21,7 @@ export default {
           
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
-                <th scope="col">ServiceID</th>
+                <th scope="col">Service ID</th>
                 <th scope="col">Experience</th>
                 <th scope="col">Address</th>
                 <th scope="col">Pin Code</th>

@@ -92,8 +92,9 @@ class ServiceProfessionalsAPI(Resource):
     @auth_required('token')
     @cache.memoize(timeout = 5)
     @marshal_with(professional_fields)
-    def get(self,service_id):
-        professionals = Professional.query.filter_by(service_id=service_id).all()
+    def get(self,service_id,user_id):
+        customer=Customer.query.filter_by(user_id=user_id).first()
+        professionals = Professional.query.filter_by(service_id=service_id, pincode=customer.pincode).all()
         return professionals
 
 # CustomerListAPI
@@ -127,5 +128,5 @@ api.add_resource(ServiceRequestAPI, '/service_requests')
 api.add_resource(CustomerListAPI, '/customers')
 api.add_resource(ProfessionalListAPI, '/professionals')
 api.add_resource(ServiceListAPI, '/services')
-api.add_resource(ServiceProfessionalsAPI, '/service/<int:service_id>/professionals')
+api.add_resource(ServiceProfessionalsAPI, '/service/<int:service_id>/professionals/<int:user_id>')
 api.add_resource(UserServiceRequestAPI, '/services_requests/<int:user_id>')

@@ -12,7 +12,7 @@ export default {
                         <ul class="navbar-nav ms-auto" style="display: flex; justify-content: center; width: 100%; padding-right: 15%;" >
                            
                                 <router-link to='/admin' class="nav-link" v-if="$store.state.role=='admin'" ><li class="nav-item">Home</li></router-link>
-                                <router-link to='/search_customer' class="nav-link" v-if="$store.state.role=='admin'" ><li class="nav-item">SearchCustomer</li></router-link>
+                                <router-link to='/search_customer' style="margin-left:15px; margin-right:15px" class="nav-link" v-if="$store.state.role=='admin'" ><li class="nav-item">Search Customer</li></router-link>
                                 <router-link to='/customer' class="nav-link" v-if="$store.state.role=='customer'" > <li class="nav-item">Home</li></router-link>
                                 <router-link to='/professional' class="nav-link" v-if="$store.state.role=='professional'" ><li class="nav-item">Home</li></router-link>
                            
