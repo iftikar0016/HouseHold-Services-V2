@@ -54,7 +54,7 @@ The database schema manages relationships between users, services, and requests.
 - **Role** – Defines user roles and permissions
 
 📷 **Schema Diagram:**  
-[View DB Schema](https://drive.google.com/file/d/1dom1ifzwveup7SJqK_54O3rStp6I9AZB/view?usp=drive_link)
+![DB Schema](DB_Schema_MAD2.png)
 
 ## 🌐 API Endpoints
 
